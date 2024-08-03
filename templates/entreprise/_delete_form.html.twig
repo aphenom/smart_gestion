@@ -1,0 +1,36 @@
+<div class="row m-b-30">
+    <div class="col-auto">
+        {% if(entreprise.etatDel == false) %}
+
+            <form method="post" action="{{ path('entreprise_desactivate', {'id': entreprise.id}) }}" onsubmit="return confirm('Êtes-vous sûre de vouloir désactiver cet enregistrement ?');">
+                <input type="hidden" name="_method" value="POST">
+                <input type="hidden" name="_token" value="{{ csrf_token('desactivate' ~ entreprise.id) }}">
+                <button class="btn btn-warning">Désactiver</button>
+            </form>
+
+        {% else %}
+
+            <form method="post" action="{{ path('entreprise_activate', {'id': entreprise.id}) }}" onsubmit="return confirm('Êtes-vous sûre de vouloir réactiver cet enregistrement ?');">
+                <input type="hidden" name="_method" value="POST">
+                <input type="hidden" name="_token" value="{{ csrf_token('activate' ~ entreprise.id) }}">
+                <button class="btn btn-success">Activer</button>
+            </form>
+
+        {% endif %}
+    </div>
+    <div class="col-auto">
+        {% if(entreprise.users.count == 0) %}
+
+            <form method="post" action="{{ path('entreprise_delete', {'id': entreprise.id}) }}" onsubmit="return confirm('Êtes-vous sûr(e) de vouloir supprimer cet enregistrement ?');">
+                <input type="hidden" name="_method" value="DELETE">
+                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ entreprise.id) }}">
+                <button class="btn btn-danger">Supprimer</button>
+            </form>
+
+        {% endif %}
+
+    </div>
+</div>
+
+
+

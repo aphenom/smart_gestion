@@ -1,0 +1,111 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Articles{% endblock %}
+
+
+{% block css %}
+    <!-- Internal Data table css -->
+    <link href="{{ asset('plugins/datatable/css/dataTables.bootstrap4.min.css') }}" rel="stylesheet" />
+    <link href="{{ asset('plugins/datatable/css/buttons.bootstrap4.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('plugins/datatable/css/responsive.bootstrap4.min.css') }}" rel="stylesheet" />
+    <link href="{{ asset('plugins/datatable/css/jquery.dataTables.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('plugins/datatable/css/responsive.dataTables.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('plugins/select2/css/select2.min.css') }}" rel="stylesheet">
+
+    {{ parent() }}
+
+{% endblock %}
+
+{% block body %}
+    <div class="row row-sm">
+        <div class="col-xl-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="main-content-label mg-b-5">
+                        <h3>Articles</h3>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="table table-bordered text-md-nowrap" id="example1">
+                            <thead>
+                                <tr>
+                                    <th class="wd-5p border-bottom-0">#</th>
+                                    <th class="wd-10p border-bottom-0">Code</th>                
+                                    <th class="wd-10p border-bottom-0">Nom</th>
+                                    <th class="wd-15p border-bottom-0">Image</th>
+                                    <th class="wd-10p border-bottom-0">PU Vente (FCFA)</th>
+                                    <th class="wd-10p border-bottom-0">PU Achat (FCFA)</th>
+                                    <th class="wd-10p border-bottom-0">Quantité</th>
+                                    <th class="wd-10p border-bottom-0">Date Ajout</th>
+                                    <th class="wd-5p border-bottom-0">Etat</th>
+                                    <th class="wd-15p border-bottom-0">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for article in articles %}
+                                    <tr>
+                                        <td>{{ loop.index}}</td>
+                                        <td>{{ article.sku }}</td>
+                                        <td>{{ article.nom }}</td>
+                                        <td><img alt="Responsive image" class="img-thumbnail wd-100p wd-sm-200" src="{{ vich_uploader_asset(article, 'imageFile') }}"></td>
+                                        <td>{{ article.puVente|number_format(0, ',', '.') }}</td>
+                                        <td>{{ article.puAchat|number_format(0, ',', '.') }}</td>
+                                        <td><font class="{{ article.quantiteStock >= article.seuilApprovisionnement ? 'tx-success' : 'tx-danger' }}">{{ article.quantiteStock }}</font></td>
+                                        <td>{{ article.dateAdd ? article.dateAdd|date('d-m-Y H:i:s') : '' }}</td>
+                                        <td><span class="badge {{ article.etatVal ? 'badge-success' : 'badge-danger' }}">{{ article.etatVal ? 'Actif' : 'Inactif' }}</span></td>
+                                        <td>
+                                            <a href="{{ path('article_show', {'id': article.id}) }}"
+                                               class="btn mb-1 btn-info btn-xs">Voir</a>
+                                            <a href="{{ path('article_edit', {'id': article.id}) }}"
+                                               class="btn mb-1 btn-success btn-xs">Modifier</a>
+                                        </td>
+                                    </tr>
+                                {% else %}
+                                    <tr>
+                                        <td colspan="10" align="center">Aucune donnée trouvée</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <a href="{{ path('article_new') }}" class="btn mb-1 btn-primary">Ajouter</a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block script %}
+
+    {{ parent() }}
+
+    <!-- Internal Data tables -->
+    <script src="{{ asset('plugins/datatable/js/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ asset('plugins/datatable/js/dataTables.dataTables.min.js') }}"></script>
+    <script src="{{ asset('plugins/datatable/js/dataTables.responsive.min.js') }}"></script>
+    <script src="{{ asset('plugins/datatable/js/responsive.dataTables.min.js') }}"></script>
+    <script src="{{ asset('plugins/datatable/js/jquery.dataTables.js') }}"></script>
+    <script src="{{ asset('plugins/datatable/js/dataTables.bootstrap4.js') }}"></script>
+    <script src="{{ asset('plugins/datatable/js/dataTables.buttons.min.js') }}"></script>
+    <script src="{{ asset('plugins/datatable/js/buttons.bootstrap4.min.js') }}"></script>
+    <script src="{{ asset('plugins/datatable/js/jszip.min.js') }}"></script>
+    <script src="{{ asset('plugins/datatable/js/pdfmake.min.js') }}"></script>
+    <script src="{{ asset('plugins/datatable/js/vfs_fonts.js') }}"></script>
+    <script src="{{ asset('plugins/datatable/js/buttons.html5.min.js') }}"></script>
+    <script src="{{ asset('plugins/datatable/js/buttons.print.min.js') }}"></script>
+    <script src="{{ asset('plugins/datatable/js/buttons.colVis.min.js') }}"></script>
+    <script src="{{ asset('plugins/datatable/js/dataTables.responsive.min.js') }}"></script>
+    <script src="{{ asset('plugins/datatable/js/responsive.bootstrap4.min.js') }}"></script>
+
+    <!-- datatable js -->
+            <script>
+                $(document).ready(function () {
+                    $('#example1').DataTable({
+                        "language": {
+                            "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/French.json"
+                        }
+                    });
+                });
+            </script>
+{% endblock %}

@@ -1,0 +1,64 @@
+{{ form_start(form, {'attr': {'class': 'form-valide', 'id': 'myForm'}}) }}
+
+<div class="control-group form-group">
+    {# Génération du label. #}
+    {{ form_label(form.montant_recu, "Montant perçu (FCFA) * ", {'label_attr': {'class': 'form-label'}})
+    }}
+    {# Affichage des erreurs pour ce champ précis. #}
+    {{ form_errors(form.montant_recu) }}
+    {# Génération de l'input. #}
+    {% if commande.montantRecu %}
+        {{ form_widget(form.montant_recu, {'attr': {'class': 'form-control', 'placeholder':'Montant perçu pour cette commande', 'required':'required', 'readonly':'true'}})
+        }}
+    {% else %}
+        {{ form_widget(form.montant_recu, {'attr': {'class': 'form-control', 'placeholder':'Montant perçu pour cette commande', 'required':'required'}})
+        }}
+    {% endif %}
+</div>
+
+<div class="control-group form-group">
+    {# Génération du label. #}
+    {{ form_label(form.date_montant, "Date de reception du montant * ", {'label_attr': {'class': 'form-label'}})
+    }}
+    {# Affichage des erreurs pour ce champ précis. #}
+    {{ form_errors(form.date_montant) }}
+    {# Génération de l'input. #}
+    {% if commande.montantRecu %}
+        {{ form_widget(form.date_montant, {'attr': {'class': 'form-control', 'placeholder':'Date de reception du montant pour cette commande', 'required':'required', 'readonly':'true'}})
+        }}
+    {% else %}
+        {{ form_widget(form.date_montant, {'attr': {'class': 'form-control', 'placeholder':'Date de reception du montant pour cette commande', 'required':'required'}})
+        }}
+    {% endif %}
+</div>
+
+{% if commande.montantRecu %}
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>{{ commande.montantRecu|number_format(0, ',', '.') }} FCFA</th>
+                <td> {{ commande.dateMontant  ? commande.dateMontant|date('d-m-Y') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Montant reçu par </th>
+                <td>{{ commande.userMontant ? commande.userMontant.displayName : '' }}</td>
+            </tr>
+        </tbody>
+    </table>
+{% else %}
+
+    <div class="control-group form-group">
+        <button class="btn btn-main-primary pd-x-30 mg-r-5 mg-t-5">{{ button_label|default('Enregistrer') }}</button>
+        <input type="reset" class="btn btn-dark pd-x-30 mg-t-5" value="Annuler">
+    </div>
+    <div class="control-group form-group btn-cancel-livraison btn-start-livraison">
+        <div class="alert alert-secondary">Les champs marqués par (*) doivent être obligatoirement
+            remplis.<br />
+            <!--Pour les champs marqués par (**) ; au minimum l'un d'entre eux doit être rempli.-->
+        </div>
+    </div>
+
+{% endif %}
+
+{{ form_widget(form) }}
+{{ form_end(form) }}

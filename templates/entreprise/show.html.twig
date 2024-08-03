@@ -1,0 +1,63 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Fiche Entreprise{% endblock %}
+
+{% block body %}
+    <div class="row">
+        <div class="col-lg-12 col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="main-content-label mg-b-5">
+                        <h3>Fiche Entreprise</h3>
+                    </div>
+
+                    <table class="table">
+                        <tbody>
+                            <tr>
+                                <th colspan="2">{% if vich_uploader_asset(entreprise, 'imageFile') %}<img alt="Responsive image" class="img-thumbnail wd-100p wd-sm-200" src="{{ vich_uploader_asset(entreprise, 'imageFile') }}">{% endif %}</th>
+                            </tr>
+                            <tr>
+                                <th>Nom</th>
+                                <td>{{ entreprise.nom }}</td>
+                            </tr>
+                            <tr>
+                                <th>Contact</th>
+                                <td>{{ entreprise.contact }}</td>
+                            </tr>
+                            <tr>
+                                <th>Adresse</th>
+                                <td>{{ entreprise.adresse }}</td>
+                            </tr>
+                            <tr>
+                                <th>Date Ajout</th>
+                                <td>{{ entreprise.dateAdd ? entreprise.dateAdd|date('d-m-Y H:i:s') : '' }}</td>
+                            </tr>
+                            <tr>
+                                <th>Etat</th>
+                                <td><span class="badge {{ entreprise.etatVal ? 'badge-success' : 'badge-danger' }}">{{ entreprise.etatVal ? 'Actif' : 'Inactif' }}</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+
+                    <div class="row m-b-30">
+                        {% if is_granted('ROLE_ADMIN') and app.user.entreprise == null %}
+                            <div class="col-auto"><a class="btn mb-1 btn-outline-primary" href="{{ path('entreprise_index') }}"><i class="fa fa-arrow-left"></i> Rétourner à la liste</a></div>
+                        {% endif %}
+                        {% if is_granted('ROLE_ADMIN') and (app.user.entreprise == null or app.user.entreprise == entreprise) %}
+                            <div class="col-auto"><a class="btn mb-1 btn-primary" href="{{ path('entreprise_edit', {'id': entreprise.id}) }}">Modifier</a></div> {% endif %}
+                        </div>
+
+                        {% if is_granted('ROLE_ADMIN') and app.user.entreprise == null %}
+                            <div class="row m-b-30">
+                                <div class="col-auto"> 
+                                    {{ include('entreprise/_delete_form.html.twig') }}
+                                </div>
+                            </div>
+                        {% endif %}
+
+                    </div>
+                </div>
+            </div>
+        </div> 
+        {% endblock %}

@@ -1,0 +1,266 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Fiche Article{% endblock %}
+
+{% block css %}
+    <!-- Internal Data table css -->
+    <link href="{{ asset('plugins/datatable/css/dataTables.bootstrap4.min.css') }}" rel="stylesheet" />
+    <link href="{{ asset('plugins/datatable/css/buttons.bootstrap4.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('plugins/datatable/css/responsive.bootstrap4.min.css') }}" rel="stylesheet" />
+    <link href="{{ asset('plugins/datatable/css/jquery.dataTables.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('plugins/datatable/css/responsive.dataTables.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('plugins/select2/css/select2.min.css') }}" rel="stylesheet">
+
+    {{ parent() }}
+
+{% endblock %}
+
+{% block body %}
+
+    <div class="row row-sm">
+        <div class="col-lg-6">
+            <div class="card mg-b-20">
+                <div class="card-body">
+                    <div class="main-content-label mg-b-5">
+                        <h3>Fiche Article</h3>
+                    </div>
+                    <div class="pl-0">
+                        <div class="main-profile-overview">
+                            {#                            <div class="main-img-user profile-user">
+                                                            <img alt="Responsive image" class="img-thumbnail wd-100p wd-sm-200" src="{{ vich_uploader_asset(article, 'imageFile') }}"><a class="fas fa-camera profile-edit" href="JavaScript:void(0);"></a>
+                                                        </div>#}
+                            <img alt="Responsive image" class="img-thumbnail wd-100p wd-sm-200" src="{{ vich_uploader_asset(article, 'imageFile') }}">
+                            <div class="d-flex justify-content-between mg-b-20">
+                                <div>
+                                    <h5 class="main-profile-name">{{ article.nom }}</h5>
+                                    {#                                    <p class="main-profile-name-text">Web Designer</p>#}
+                                </div>
+                            </div>
+
+                            <div class="main-profile-contact-list">
+                                <div class="media">
+                                    <table class="table">
+                                        <tbody>
+                                            <tr>
+                                                <th>Code Produit</th>
+                                                <td>{{ article.sku }}</td>
+                                            </tr>
+
+                                            <tr>
+                                                <th>Prix unitaire d'achat</th>
+                                                <td>{{ article.puAchat|number_format(0, ',', '.') }} FCFA</td>                                                </tr>
+                                            <tr>
+                                                <th>Prix unitaire de vente</th>
+                                                <td>{{ article.puVente|number_format(0, ',', '.') }} FCFA</td>                                               </tr>
+                                            <tr>
+                                                <th>Seuil d'approvisionnement</th>
+                                                <td>{{ article.seuilApprovisionnement }}</td>                                            </tr>
+                                            <tr>
+                                                <th>Ventes</th>
+                                                <td>{{ article.quantiteCommandeArticles }} ({{ article.quantiteCommandeArticlesEnCours }} en cours)</td>                                              </tr>
+                                            <tr>
+                                                <th>Quantité disponible</th>
+                                                <td><font class="{{ article.quantiteStock >= article.seuilApprovisionnement ? 'tx-success' : 'tx-danger' }}">{{ article.quantiteStock }}</font></td>                                             </tr>
+                                            <tr>
+                                                <th>Ajouté le :</th>
+                                                <td>{{ article.dateAdd ? article.dateAdd|date('d-m-Y H:i:s') : '' }} - <font class="{{ article.etatVal ? 'tx-success' : 'tx-danger' }}">{{ article.etatVal ? 'Actif' : 'Inactif' }}</font></td>                                              </tr>
+
+                                            <tr>
+                                                <th>Ajouté par </th>
+                                                <td>{{ article.userAdd.displayName }}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+
+                                </div>
+
+                            </div><!-- main-profile-contact-list -->
+
+
+                            <div class="row m-b-30">
+                                <div class="col-auto"><a class="btn mb-1 btn-outline-primary" href="{{ path('article_index') }}"><i class="fa fa-arrow-left"></i> Rétourner à la liste</a></div>
+                                <div class="col-auto"><a class="btn mb-1 btn-primary" href="{{ path('article_edit', {'id': article.id}) }}">Modifier</a></div>
+                            </div>
+
+                            <div class="row m-b-30">
+                                <div class="col-auto"><a class="btn mb-1 btn-success" href="{{ path('article_credit', {'id': article.id}) }}"> Augmenter stock</a></div>
+                                <div class="col-auto"><a class="btn mb-1 btn-warning" href="{{ path('article_debit', {'id': article.id}) }}">Diminuer stock</a></div>
+                            </div>
+
+                            <div class="row m-b-30">
+                                <div class="col-auto"> 
+                                    {{ include('article/_delete_form.html.twig') }}
+                                </div>
+                            </div>
+
+                        </div><!-- main-profile-overview -->
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="col-lg-6">
+
+            <div class="card overflow-hidden latest-tasks">
+                <div class="">
+                    <div class="d-flex justify-content-between pl-4 pt-4 pr-4">
+                        <h4 class="card-title mg-b-10">Historique</h4>
+                        <i class="mdi mdi-dots-horizontal text-gray"></i>
+                    </div>
+                    <div class="">
+                        <ul class="nav nav-tabs nav-tabs-line nav-tabs-line-brand nav-tabs-bold" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link active show" data-toggle="tab" href="#tasktab-1" role="tab" aria-selected="false">
+                                    Achats
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" data-toggle="tab" href="#tasktab-2" role="tab" aria-selected="false">
+                                    Ajouts
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" data-toggle="tab" href="#tasktab-3" role="tab" aria-selected="true">
+                                    Retraits
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="card-body pt-3">
+                    <div class="tab-content">
+                        <div class="tab-pane fade active show" id="tasktab-1" role="tabpanel">
+                            <div class="table-responsive">   
+                                <table class="table table-bordered text-md-nowrap" id="example1">
+                                    <thead>
+                                        <tr>
+                                            <th class="wd-5p border-bottom-0">#</th>
+                                            <th class="wd-20p border-bottom-0">Code commande</th>                
+                                            <th class="wd-20p border-bottom-0">Type</th>
+                                            <th class="wd-30p border-bottom-0">Nom Client</th>
+                                            <th class="wd-5p border-bottom-0">Quantité</th>
+                                            <th class="wd-20p border-bottom-0">Etat</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for ca in commandeArticles|reverse %}
+                                            {% set num = 0 %}
+                                            {% if ca.commande.etatVal and ca.commande.etatDel == false %}                   
+                                                {% set num = num+1 %}   
+                                                <tr>
+                                                    <td>{{ num }}</td>
+                                                    <td>{{ ca.commande.sku }}</td>
+                                                    <td>{{ ca.commande.typeCommande|upper }}</td>
+                                                    <td>{{ ca.commande.nomClient }}</td>
+                                                    <td>{{ ca.quantite }}</td>
+                                                    <td><span class="badge badge-{{ ca.commande.etat['etatCouleur'] }}">{{ ca.commande.etat['etatLibelle'] }}</span></td>
+
+                                                </tr>
+                                            {% endif %}
+                                        {% else %}
+                                            <tr>
+                                                <td colspan="10" align="center">Aucune donnée trouvée</td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>           </div>
+                        </div>
+                        <div class="tab-pane fade" id="tasktab-2" role="tabpanel">
+                            <div class="alert alert-primary" role="alert">
+                                Quantité ajoutée : <a href="#" class="alert-link">{{ article.quantiteCredit }}</a> 
+                            </div>
+                            <table class="table table-bordered text-md-nowrap" id="example11">
+                                <thead>
+                                    <tr>
+                                        <th class="wd-5p border-bottom-0">#</th>
+                                        <th class="wd-25p border-bottom-0">Date</th>                
+                                        <th class="wd-15p border-bottom-0">Quantité</th>
+                                        <th class="wd-55p border-bottom-0">Objet</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for credit in article.creditArticles|reverse %}
+                                        <tr>
+                                            <td>{{ loop.index}}</td>
+                                            <td>{{ credit.dateAdd ? credit.dateAdd|date('d-m-Y H:i:s') : '' }}</td>
+                                            <td>{{ credit.quantite }}</td>
+                                            <td>{{ credit.objet }}</td>
+                                        </tr>
+                                    {% else %}
+                                        <tr>
+                                            <td colspan="10" align="center">Aucune donnée trouvée</td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="tab-pane fade" id="tasktab-3" role="tabpanel">
+                            <div class="alert alert-primary" role="alert">
+                                Quantité retirée : <a href="#" class="alert-link">{{ article.quantiteDebit }}</a> ({{ article.quantiteDefectueux }} Défectueux)
+                            </div>
+                            <table class="table table-bordered text-md-nowrap example1" id="example12">
+                                <thead>
+                                    <tr>
+                                        <th class="wd-5p border-bottom-0">#</th>
+                                        <th class="wd-25p border-bottom-0">Date</th>                
+                                        <th class="wd-15p border-bottom-0">Quantité</th>
+                                        <th class="wd-55p border-bottom-0">Objet</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for debit in article.debitArticles|reverse %}
+                                        <tr>
+                                            <td>{{ loop.index}}</td>
+                                            <td>{{ debit.dateAdd ? debit.dateAdd|date('d-m-Y H:i:s') : '' }}</td>
+                                            <td><font class="{{ debit.etatDefectueux ? 'tx-danger' : '' }}">{{ debit.quantite }}</font></td>
+                                            <td>{% if debit.etatDefectueux %}<font class="tx-danger">Défectueux - Référence : {{ debit.refArticle }}</font> - {% endif %}{{ debit.objet }}</td>
+                                        </tr>
+                                    {% else %}
+                                        <tr>
+                                            <td colspan="10" align="center">Aucune donnée trouvée</td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block script %}
+
+    {{ parent() }}
+
+    <!-- Internal Data tables -->
+    <script src="{{ asset('plugins/datatable/js/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ asset('plugins/datatable/js/dataTables.dataTables.min.js') }}"></script>
+    <script src="{{ asset('plugins/datatable/js/dataTables.responsive.min.js') }}"></script>
+    <script src="{{ asset('plugins/datatable/js/responsive.dataTables.min.js') }}"></script>
+    <script src="{{ asset('plugins/datatable/js/jquery.dataTables.js') }}"></script>
+    <script src="{{ asset('plugins/datatable/js/dataTables.bootstrap4.js') }}"></script>
+    <script src="{{ asset('plugins/datatable/js/dataTables.buttons.min.js') }}"></script>
+    <script src="{{ asset('plugins/datatable/js/buttons.bootstrap4.min.js') }}"></script>
+    <script src="{{ asset('plugins/datatable/js/jszip.min.js') }}"></script>
+    <script src="{{ asset('plugins/datatable/js/pdfmake.min.js') }}"></script>
+    <script src="{{ asset('plugins/datatable/js/vfs_fonts.js') }}"></script>
+    <script src="{{ asset('plugins/datatable/js/buttons.html5.min.js') }}"></script>
+    <script src="{{ asset('plugins/datatable/js/buttons.print.min.js') }}"></script>
+    <script src="{{ asset('plugins/datatable/js/buttons.colVis.min.js') }}"></script>
+    <script src="{{ asset('plugins/datatable/js/dataTables.responsive.min.js') }}"></script>
+    <script src="{{ asset('plugins/datatable/js/responsive.bootstrap4.min.js') }}"></script>
+
+    <!-- datatable js -->
+    <script>
+        $(document).ready(function () {
+            $('#example1').DataTable({
+                "language": {
+                    "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/French.json"
+                }
+            });
+        });
+    </script>
+{% endblock %}

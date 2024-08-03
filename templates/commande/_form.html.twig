@@ -1,0 +1,173 @@
+{{ form_start(form, {'attr': {'class': 'form-valide'}}) }}
+
+<div class="control-group form-group" {% if commande.etatProprio == false %} style="display:none" {% endif %}>
+    {# Génération du label. #}
+    {{ form_label(form.type_commande, "Type de commande * ", {'label_attr': {'class': 'form-label'}})
+    }}
+    {# Affichage des erreurs pour ce champ précis. #}
+    {{ form_errors(form.type_commande) }}
+    {# Génération de l'input. #}
+    {% if commande.typeCommande %}
+        {{ commande.typeCommande|upper }}
+        {{ form_widget(form.type_commande, {'attr': {'class': 'form-control', 'style': 'display:none', 'placeholder':"Type de commande", 'onchange':"selectScopeChooseConsequences()", 'onfocus':"hideOption()"}})
+        }}
+    {% else %}
+        {{ form_widget(form.type_commande, {'attr': {'class': 'form-control', 'placeholder':"Type de commande", 'onchange':"selectScopeChooseConsequences()", 'onfocus':"hideOption()"}})
+        }}
+    {% endif %}
+</div>
+
+<div class="control-group form-group commande-tout">
+    {# Génération du label. #}
+    {{ form_label(form.nom_client, "Nom du client * ", {'label_attr': {'class': 'form-label'}})
+    }}
+    {# Affichage des erreurs pour ce champ précis. #}
+    {{ form_errors(form.nom_client) }}
+    {# Génération de l'input. #}
+    {{ form_widget(form.nom_client, {'attr': {'class': 'form-control', 'placeholder':"Nom du client", 'required':"required"}})
+    }}
+</div>
+
+<div class="control-group form-group commande-fb">
+    {# Génération du label. #}
+    {{ form_label(form.numero_client, "Numéro du client * ", {'label_attr': {'class': 'form-label'}})
+    }}
+    {# Affichage des erreurs pour ce champ précis. #}
+    {{ form_errors(form.numero_client) }}
+    {# Génération de l'input. #}
+    {{ form_widget(form.numero_client, {'attr': {'class': 'form-control', 'placeholder':"Numéro du client"}})
+    }}
+</div>
+
+<div class="control-group form-group commande-fb-jumia">
+    {# Génération du label. #}
+    {{ form_label(form.lieu_livraison, "Lieu de livraison * ", {'label_attr': {'class': 'form-label'}})
+    }}
+    {# Affichage des erreurs pour ce champ précis. #}
+    {{ form_errors(form.lieu_livraison) }}
+    {# Génération de l'input. #}
+    {{ form_widget(form.lieu_livraison, {'attr': {'class': 'form-control', 'placeholder':"Lieu de livraison de la commande"}})
+    }}
+</div>
+
+<div class="control-group form-group commande-fb-jumia">
+    {# Génération du label. #}
+    {{ form_label(form.date_livraison_souhaite, "Date de livraison souhaitée ", {'label_attr': {'class': 'form-label'}})
+    }}
+    {# Affichage des erreurs pour ce champ précis. #}
+    {{ form_errors(form.date_livraison_souhaite) }}
+    {# Génération de l'input. #}
+    {{ form_widget(form.date_livraison_souhaite, {'attr': {'class': 'form-control', 'placeholder':"Date de livraison souhaité de la commande"}})
+    }}
+</div>
+
+<div class="control-group form-group commande-fb-jumia">
+    {# Génération du label. #}
+    {{ form_label(form.frais_livraison, "Frais de livraison (FCFA) * ", {'label_attr': {'class': 'form-label'}})
+    }}
+    {# Affichage des erreurs pour ce champ précis. #}
+    {{ form_errors(form.frais_livraison) }}
+    {# Génération de l'input. #}
+    {{ form_widget(form.frais_livraison, {'attr': {'class': 'form-control', 'placeholder':"Frais de livraison de la commande"}})
+    }}
+</div>
+
+<div class="control-group form-group commande-tout">
+    {# Génération du label. #}
+    {{ form_label(form.commentaire, "Commentaire ", {'label_attr': {'class': 'form-label'}})
+    }}
+    {# Affichage des erreurs pour ce champ précis. #}
+    {{ form_errors(form.commentaire) }}
+    {# Génération de l'input. #}
+    {{ form_widget(form.commentaire, {'attr': {'class': 'form-control', 'placeholder':"Commentaire concernant la commande", 'required':"required"}})
+    }}
+</div>
+
+<div class="control-group form-group commande-tout">
+    <button class="btn btn-main-primary pd-x-30 mg-r-5 mg-t-5">{{ button_label|default('Enregistrer') }}</button>
+    <input type="reset" class="btn btn-dark pd-x-30 mg-t-5" value="Annuler">
+</div>
+<div class="control-group form-group">
+    <div class="alert alert-secondary">Les champs marqués par (*) doivent être obligatoirement
+        remplis.<br />
+        <!--Pour les champs marqués par (**) ; au minimum l'un d'entre eux doit être rempli.-->
+    </div>
+</div>
+{{ form_widget(form) }}
+{{ form_end(form) }}
+
+<script type="text/javascript">
+
+
+// and here's the trick (works everywhere)
+    function r(f) {
+        /in/.test(document.readyState) ? setTimeout('r(' + f + ')', 9) : f()
+    }
+// use like
+    r(function () {
+        selectScopeChooseConsequences();
+    });
+
+    function selectScopeChooseConsequences() {
+        //alert(object.value);
+        val = $('#commande_type_commande').val();
+        //alert(val);
+        if (val != "") {
+            $('.commande-tout').fadeIn("slow");
+            $('#commande_nom_client').attr('required', true);
+            //facebook
+            if (val == "reseaux sociaux" || val == "service livraison") {
+                $('.commande-fb-jumia').fadeIn("slow");
+                $('#commande_numero_client').attr('required', true);
+                $('#commande_lieu_livraison').attr('required', true);
+                $('#commande_frais_livraison').attr('required', true);
+                //$('#commande_lieu_livraison').val('');
+                $('.commande-fb').fadeIn("slow");
+            } else {
+                if (val == "jumia") {
+                    $('.commande-fb-jumia').fadeIn("slow");
+                    $('#commande_numero_client').attr('required', false);
+                    $('#commande_lieu_livraison').attr('required', true);
+                    $('#commande_lieu_livraison').val('JUMIA');
+                    //$('#commande_lieu_livraison').attr('readonly', true);
+                    $('#commande_frais_livraison').attr('required', true);
+                } else { //locale
+                    $('#commande_numero_client').attr('required', false);
+                    $('.commande-fb-jumia').fadeOut("slow");
+                    $('.commande-fb').fadeOut("slow");
+                    //$('#commande_lieu_livraison').attr('required', false);
+                    $('#commande_lieu_livraison').val('');
+                    $('#commande_lieu_livraison').attr('readonly', false);
+                    $('#commande_frais_livraison').attr('required', false);
+                }
+            }
+        }
+        //locale
+        else {
+            $('.commande-fb-jumia').fadeOut("slow");
+            $('.commande-fb').fadeOut("slow");
+            $('.commande-tout').fadeOut("slow");
+        }
+        /*
+         if (val == "hide") {
+         $('#btn_password').fadeIn("slow");
+         $('#btn_password_reset').fadeOut("slow");
+         $('#user_password').fadeOut("slow");
+         $('#user_password').val($('#user_text_password').val());
+         } else {
+         $('#btn_password').fadeOut("slow");
+         $('#btn_password_reset').fadeIn("slow");
+         $('#user_password').fadeIn("slow");
+         $('#user_password').val("");
+         }
+         */
+
+    }
+
+
+    function hideOption() {
+    {% if commande.etatProprio == true %} 
+        $("#commande_type_commande option[value='service livraison']").remove();
+    {% endif %}
+        }
+</script>

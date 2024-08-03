@@ -1,0 +1,101 @@
+{{ form_start(form, {'attr': {'class': 'form-valide'}}) }}
+
+<div class="control-group form-group">
+    {# Génération du label. #}
+    {{ form_label(form.user.username, "Identifiant *  ", {'label_attr': {'class': 'form-label'}})
+    }}
+    {# Affichage des erreurs pour ce champ précis. #}
+    {{ form_errors(form.user.username) }}
+    {# Génération de l'input. #}
+    {{ form_widget(form.user.username, {'attr': {'class': 'form-control', 'placeholder':'Identifiant', 'required':'required'}})
+    }}
+</div>
+
+<div class="row control-group form-group">
+    <div class="col-lg-9 col-md-8 form-group mg-b-0">
+        {# Génération du label. #}
+        {{ form_label(form.user.password, "Mot de passe *  ", {'label_attr': {'class': 'form-label'}})
+        }}
+        {# Affichage des erreurs pour ce champ précis. #}
+        {{ form_errors(form.user.password) }}
+        <a id="btn_password" style="display:none" class="col-lg-3 col-md-4 btn btn-outline-primary pd-x-30 mg-r-5 mg-t-5"
+           href="#" onClick="modifPass('show')"><i class="fa fa-edit"></i> Modifier</a>
+        {# Génération de l'input. #}
+        {{ form_widget(form.user.password, {'attr': {'class': 'form-control', 'placeholder':'Mot de passe', 'required':'required'}})
+        }}
+    </div>
+    <div class="col-lg-3 col-md-4 mg-t-10 mg-sm-t-25">
+        <a id="btn_password_reset" style="display:none" class="btn btn-dark pd-x-20"
+           href="#" onClick="modifPass('hide')"> Annuler modification</a>
+    </div>
+</div>
+
+<div class="row control-group form-group">
+    <div class="col-lg-6 col-md-6 form-group mg-b-0">
+        {# Génération du label. #}
+        {{ form_label(form.nom, "Nom * ", {'label_attr': {'class': 'form-label'}})
+        }}
+        {# Affichage des erreurs pour ce champ précis. #}
+        {{ form_errors(form.nom) }}
+        {# Génération de l'input. #}
+        {{ form_widget(form.nom, {'attr': {'class': 'form-control', 'placeholder':'Nom'}})
+        }}
+    </div>
+    <div class="col-lg-6 col-md-6 form-group mg-b-0">
+        {# Génération du label. #}
+        {{ form_label(form.prenom, "Prénom(s) *", {'label_attr': {'class': 'form-label'}})
+        }}
+        {# Affichage des erreurs pour ce champ précis. #}
+        {{ form_errors(form.prenom) }}
+        {# Génération de l'input. #}
+        {{ form_widget(form.prenom, {'attr': {'class': 'form-control', 'placeholder':'Prénom(s)'}})
+        }}
+    </div>
+</div>
+
+<div class="control-group form-group">
+    {# Génération du label. #}
+    {{ form_label(form.contact, "Contact * ", {'label_attr': {'class': 'form-label'}})
+    }}
+    {# Affichage des erreurs pour ce champ précis. #}
+    {{ form_errors(form.contact) }}
+    {# Génération de l'input. #}
+    {{ form_widget(form.contact, {'attr': {'class': 'form-control', 'placeholder':'Contact'}})
+    }}
+</div>
+
+<div class="row control-group form-group">
+    <div class="col-lg-6 col-md-6 form-group mg-b-0">
+        {# Génération du label. #}
+        {{ form_label(form.type_piece, "Type de pièce d'identité * ", {'label_attr': {'class': 'form-label'}})
+        }}
+        {# Affichage des erreurs pour ce champ précis. #}
+        {{ form_errors(form.type_piece) }}
+        {# Génération de l'input. #}
+        {{ form_widget(form.type_piece, {'attr': {'class': 'form-control', 'placeholder':'Nom'}})
+        }}
+    </div>
+    <div class="col-lg-6 col-md-6 form-group mg-b-0">
+        {# Génération du label. #}
+        {{ form_label(form.numero_piece, "Numéro de pièce d'identité *", {'label_attr': {'class': 'form-label'}})
+        }}
+        {# Affichage des erreurs pour ce champ précis. #}
+        {{ form_errors(form.numero_piece) }}
+        {# Génération de l'input. #}
+        {{ form_widget(form.numero_piece, {'attr': {'class': 'form-control', 'placeholder':'Prénom(s)'}})
+        }}
+    </div>
+</div>
+
+<div class="control-group form-group">
+    <button class="btn btn-main-primary pd-x-30 mg-r-5 mg-t-5">{{ button_label|default('Enregistrer') }}</button>
+    <input type="reset" class="btn btn-dark pd-x-30 mg-t-5" value="Annuler">
+</div>
+<div class="control-group form-group">
+    <div class="alert alert-secondary">Les champs marqués par (*) doivent être obligatoirement
+        remplis.<br />
+        <!--Pour les champs marqués par (**) ; au minimum l'un d'entre eux doit être rempli.-->
+    </div>
+</div>
+{{ form_widget(form) }}
+{{ form_end(form) }}

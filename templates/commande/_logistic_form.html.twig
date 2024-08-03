@@ -1,0 +1,54 @@
+{{ form_start(form, {'attr': {'class': 'form-valide', 'id': 'myForm'}}) }}
+
+<a href="#" class="btn mb-1 btn-info btn-xs"id="btn-start-lancement-view" onclick="visibleForm('start-lancement')">Lancer le traitement</a>
+
+<a href="#" id="btn-cancel-lancement" onclick="visibleForm('cancel-lancement')" class="btn mb-1 btn-danger btn-xs">Annuler le traitement</a>
+
+ {% if commande.etatRelance and commande.etatLivraison %}
+<a href="#"  onClick="redirectStatut('lancement-relance')" class="btn mb-1 btn-warning btn-xs">A relancer</a>
+
+<a href="#"  onClick="redirectStatut('lancement-annule')" class="btn mb-1 btn-danger btn-xs">Annuler définitivement</a>
+{% endif %}
+    
+<a href="{{ path('commande_facture', {'id': commande.id}) }}" target="_blank" class="btn mb-1 btn-primary btn-xs">Imprimer la facture</a>
+</div>
+
+<div class="control-group form-group btn-start-lancement">
+    {# Génération du label. #}
+    {{ form_label(form.commentaire, "Commentaire ", {'label_attr': {'class': 'form-label'}})
+    }}
+    {# Affichage des erreurs pour ce champ précis. #}
+    {{ form_errors(form.commentaire) }}
+    {# Génération de l'input. #}
+    {{ form_widget(form.commentaire, {'attr': {'class': 'form-control', 'placeholder':"Commentaire"}})
+    }}
+</div>
+
+<div class="control-group form-group btn-start-lancement">
+    <a class="btn btn-info pd-x-30 mg-r-5 mg-t-5" onclick="submitForm('start-lancement')">{{ button_label|default('Lancer le traitement') }}</a>
+    <input type="reset" class="btn btn-dark pd-x-30 mg-t-5" value="Annuler" onclick="visibleForm('start-lancement-hide')">
+</div>
+
+<div class="control-group form-group btn-cancel-lancement">
+    {# Génération du label. #}
+    {{ form_label(form.objet_retour, "Commentaire ", {'label_attr': {'class': 'form-label'}})
+    }}
+    {# Affichage des erreurs pour ce champ précis. #}
+    {{ form_errors(form.objet_retour) }}
+    {# Génération de l'input. #}
+    {{ form_widget(form.objet_retour, {'attr': {'class': 'form-control', 'placeholder':"Commentaire"}})
+    }}
+</div>
+
+<div class="control-group form-group btn-cancel-lancement">
+    <a class="btn btn-danger pd-x-30 mg-r-5 mg-t-5" onclick="submitForm('cancel-lancement')">{{ button_label|default('Annuler le traitement') }}</a>
+    <input type="reset" class="btn btn-dark pd-x-30 mg-t-5" value="Annuler" onclick="visibleForm('cancel-lancement-hide')">
+</div>
+<div class="control-group form-group btn-cancel-lancement btn-start-lancement">
+    <div class="alert alert-secondary">Les champs marqués par (*) doivent être obligatoirement
+        remplis.<br />
+        <!--Pour les champs marqués par (**) ; au minimum l'un d'entre eux doit être rempli.-->
+    </div>
+</div>
+{{ form_widget(form) }}
+{{ form_end(form) }}

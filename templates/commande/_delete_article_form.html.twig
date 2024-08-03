@@ -1,0 +1,7 @@
+{% if(commandeArticle.commande.etatLivraison == false) %}
+    <form method="post" action="{{ path('commande_article_delete', {'id': ca.id}) }}" onsubmit="return confirm('Etes vous sûr de vouloir retirer cet article ?');">
+        <input type="hidden" name="_method" value="POST">
+        <input type="hidden" name="_token" value="{{ csrf_token('desactivate' ~ ca.id) }}">
+        <button class="btn btn-danger">Retirer</button>
+    </form>
+{% endif %}

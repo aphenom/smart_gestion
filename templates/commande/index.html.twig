@@ -1,0 +1,136 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ titre }}{% endblock %}
+
+
+{% block css %}
+    <!-- Internal Data table css -->
+    <link href="{{ asset('plugins/datatable/css/dataTables.bootstrap4.min.css') }}" rel="stylesheet" />
+    <link href="{{ asset('plugins/datatable/css/buttons.bootstrap4.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('plugins/datatable/css/responsive.bootstrap4.min.css') }}" rel="stylesheet" />
+    <link href="{{ asset('plugins/datatable/css/jquery.dataTables.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('plugins/datatable/css/responsive.dataTables.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('plugins/select2/css/select2.min.css') }}" rel="stylesheet">
+
+    {{ parent() }}
+
+{% endblock %}
+
+{% block body %}
+    <div class="row row-sm">
+        <div class="col-xl-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="main-content-label mg-b-5">
+                        <h3>{{ titre }}</h3>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="table table-bordered text-md-nowrap" id="example1">
+                            <thead>
+                                <tr>
+                                    <th class="wd-5p border-bottom-0">#</th>
+                                    <th class="wd-10p border-bottom-0">Commande</th>
+                                    <th class="wd-15p border-bottom-0">Type de commande</th>
+                                    <th class="wd-15p border-bottom-0">Nom du client</th>
+                                    <th class="wd-10p border-bottom-0">Contact client</th>
+                                    <th class="wd-15p border-bottom-0">Lieu livraison</th>
+                                    <th class="wd-10p border-bottom-0">Date souhaitée</th>
+                                    <th class="wd-10p border-bottom-0">Etat</th>
+                                        {#  <th class="wd-5p border-bottom-0">Montant_recu</th>
+                                                                              <th>Sku</th>
+                                                                                <th>Date_add</th>
+                                                                                <th>Date_del</th>
+                                                                                <th>Etat_val</th>
+                                                                                <th>Etat_del</th>
+                                                                                <th>Date_livraison</th>
+                                                                                <th>Etat_livraison</th>
+                                                                                <th>Date_retour</th>
+                                                                                <th>Etat_retour</th>#}
+                                    <th class="wd-10p border-bottom-0">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for commande in commandes %}
+                                    <tr>
+                                        <td>{{ loop.index}}</td>
+                                        <td>{{ commande.sku }}</td>
+                                        <td>{{ commande.typeCommande|upper }}</td>
+                                        <td>{{ commande.nomClient }}</td>
+                                        <td>{{ commande.numeroClient }}</td>
+                                        <td>{{ commande.lieuLivraison }}<br/></td>
+                                            {#<td>{{ commande.fraisLivraison }}</td>
+                                            <td>{{ commande.montantRecu }}</td>
+                                            <td>{{ commande.sku }}</td>
+                                            <td>{{ commande.dateAdd ? commande.dateAdd|date('Y-m-d H:i:s') : '' }}</td>
+                                            <td>{{ commande.dateDel ? commande.dateDel|date('Y-m-d H:i:s') : '' }}</td>
+                                            <td>{{ commande.etatVal ? 'Yes' : 'No' }}</td>
+                                            <td>{{ commande.etatDel ? 'Yes' : 'No' }}</td>
+                                            <td>{{ commande.dateLivraison ? commande.dateLivraison|date('Y-m-d H:i:s') : '' }}</td>
+                                            <td>{{ commande.etatLivraison ? 'Yes' : 'No' }}</td>#}
+                                        <td>{{ commande.dateLivraisonSouhaite ? commande.dateLivraisonSouhaite|date('d-m-Y H:i:s') : '' }}</td>
+                                        {#                                        <td>{{ commande.dateAdd ? commande.dateAdd|date('d-m-Y H:i:s') : '' }}</td>#}
+                                        <td><span class="badge badge-{{ commande.etat['etatCouleur'] }}">{{ commande.etat['etatLibelleNext'] }}</span></td>
+                                        <td>
+                                            <a href="{{ role == "commercial" ? path('commande_article_new', {'id': commande.id}) : path('commande_steps', {'id': commande.id, 'role': role, 'etat': etat}) }}"
+                                               class="btn mb-1 btn-info btn-xs">Voir</a>
+                                            {#<a href="{{ path('commande_edit', {'id': commande.id}) }}"
+                                               class="btn mb-1 btn-success btn-xs">Modifier</a>#}
+                                        </td>
+                                    </tr>
+                                {% else %}
+                                    <tr>
+                                        <td colspan="10" align="center">Aucune donnée trouvée</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    {#<a href="{{ path('commande_new') }}" class="btn mb-1 btn-primary">Ajouter</a>#}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block script %}
+
+    {{ parent() }}
+
+    <!-- Internal Data tables -->
+    <script src="{{ asset('plugins/datatable/js/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ asset('plugins/datatable/js/dataTables.dataTables.min.js') }}"></script>
+    <script src="{{ asset('plugins/datatable/js/dataTables.responsive.min.js') }}"></script>
+    <script src="{{ asset('plugins/datatable/js/responsive.dataTables.min.js') }}"></script>
+    <script src="{{ asset('plugins/datatable/js/jquery.dataTables.js') }}"></script>
+    <script src="{{ asset('plugins/datatable/js/dataTables.bootstrap4.js') }}"></script>
+    <script src="{{ asset('plugins/datatable/js/dataTables.buttons.min.js') }}"></script>
+    <script src="{{ asset('plugins/datatable/js/buttons.bootstrap4.min.js') }}"></script>
+    <script src="{{ asset('plugins/datatable/js/jszip.min.js') }}"></script>
+    <script src="{{ asset('plugins/datatable/js/pdfmake.min.js') }}"></script>
+    <script src="{{ asset('plugins/datatable/js/vfs_fonts.js') }}"></script>
+    <script src="{{ asset('plugins/datatable/js/buttons.html5.min.js') }}"></script>
+    <script src="{{ asset('plugins/datatable/js/buttons.print.min.js') }}"></script>
+    <script src="{{ asset('plugins/datatable/js/buttons.colVis.min.js') }}"></script>
+    <script src="{{ asset('plugins/datatable/js/dataTables.responsive.min.js') }}"></script>
+    <script src="{{ asset('plugins/datatable/js/responsive.bootstrap4.min.js') }}"></script>
+
+    <!-- datatable js -->
+    <script>
+        $(document).ready(function () {
+            $('#example1').DataTable({
+        {% if(is_granted('ROLE_ADMIN')) %}
+                        dom: 'Bfrtip',
+                        buttons: [
+                            'excel', 'colvis'
+                        ],
+        {% endif %}
+                                    "language": {
+                                        "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/French.json"
+                                    }
+                                });
+                            }
+                            );
+    </script>
+{% endblock %}

@@ -1,0 +1,47 @@
+{{ form_start(form, {'attr': {'class': 'form-valide'}}) }}
+
+<div class="control-group form-group">
+    {# Génération du label. #}
+    {{ form_label(form.article, "Article * ", {'label_attr': {'class': 'form-label'}})
+    }}
+    {# Affichage des erreurs pour ce champ précis. #}
+    {{ form_errors(form.article) }}
+    {# Génération de l'input. #}
+    {{ form_widget(form.article, {'attr': {'class': 'form-control', 'placeholder':"Article à ajouter à la commande"}})
+    }}
+</div>
+
+<div class="control-group form-group">
+    {# Génération du label. #}
+    {{ form_label(form.quantite, "Quantite * ", {'label_attr': {'class': 'form-label'}})
+    }}
+    {# Affichage des erreurs pour ce champ précis. #}
+    {{ form_errors(form.quantite) }}
+    {# Génération de l'input. #}
+    {{ form_widget(form.quantite, {'attr': {'class': 'form-control', 'placeholder':"Quantité de l'article à ajouter à la commande", 'required':"required"}})
+    }}
+</div>
+
+<div class="control-group form-group">
+    {# Génération du label. #}
+    {{ form_label(form.remise, "Remise ", {'label_attr': {'class': 'form-label'}})
+    }}
+    {# Affichage des erreurs pour ce champ précis. #}
+    {{ form_errors(form.remise) }}
+    {# Génération de l'input. #}
+    {{ form_widget(form.remise, {'attr': {'class': 'form-control', 'placeholder':"Remise sur le montant de l'article à ajouter à la commande", 'required':"required"}})
+    }}
+</div>
+
+<div class="control-group form-group">
+    <button class="btn btn-main-primary pd-x-30 mg-r-5 mg-t-5">{{ button_label|default('Ajouter à la commande') }}</button>
+    <input type="reset" class="btn btn-dark pd-x-30 mg-t-5" value="Annuler">
+</div>
+<div class="control-group form-group">
+    <div class="alert alert-secondary">Les champs marqués par (*) doivent être obligatoirement
+        remplis.<br />
+        <!--Pour les champs marqués par (**) ; au minimum l'un d'entre eux doit être rempli.-->
+    </div>
+</div>
+{{ form_widget(form) }}
+{{ form_end(form) }}

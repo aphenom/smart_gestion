@@ -1,0 +1,36 @@
+{{ form_start(form, {'attr': {'class': 'form-valide'}}) }}
+
+<div class="control-group form-group">
+    {# Génération du label. #}
+    {{ form_label(form.quantite, "Quantité * ", {'label_attr': {'class': 'form-label'}})
+    }}
+    {# Affichage des erreurs pour ce champ précis. #}
+    {{ form_errors(form.quantite) }}
+    {# Génération de l'input. #}
+    {{ form_widget(form.quantite, {'attr': {'class': 'form-control', 'placeholder':"Quantité  à rétirer"}})
+    }}
+</div>
+
+<div class="control-group form-group">
+    {# Génération du label. #}
+    {{ form_label(form.objet, "Objet ", {'label_attr': {'class': 'form-label'}})
+    }}
+    {# Affichage des erreurs pour ce champ précis. #}
+    {{ form_errors(form.objet) }}
+    {# Génération de l'input. #}
+    {{ form_widget(form.objet, {'attr': {'class': 'form-control', 'placeholder':"Raison du retrait (Falcutatif)"}})
+    }}
+</div>
+
+<div class="control-group form-group">
+    <button class="btn btn-main-primary pd-x-30 mg-r-5 mg-t-5">{{ button_label|default('Enregistrer') }}</button>
+    <input type="reset" class="btn btn-dark pd-x-30 mg-t-5" value="Annuler">
+</div>
+<div class="control-group form-group">
+    <div class="alert alert-secondary">Les champs marqués par (*) doivent être obligatoirement
+        remplis.<br />
+        <!--Pour les champs marqués par (**) ; au minimum l'un d'entre eux doit être rempli.-->
+    </div>
+</div>
+{{ form_widget(form) }}
+{{ form_end(form) }}

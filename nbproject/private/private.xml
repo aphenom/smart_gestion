@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-private xmlns="http://www.netbeans.org/ns/project-private/1">
+    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
+    <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
+        <group>
+            <file>file:/C:/wamp/www/tontine_app/templates/transaction/_delete_form.html.twig</file>
+            <file>file:/C:/wamp/www/tontine_app/src/Repository/TransactionRepository.php</file>
+            <file>file:/C:/wamp/www/tontine_app/templates/tontine/edit.html.twig</file>
+            <file>file:/C:/wamp/www/tontine_app/templates/default/index.html.twig</file>
+            <file>file:/C:/wamp/www/tontine_app/templates/user/edit.html.twig</file>
+            <file>file:/C:/wamp/www/tontine_app/src/Controller/UserController.php</file>
+            <file>file:/C:/wamp/www/tontine_app/src/Form/TransactionType.php</file>
+            <file>file:/C:/wamp/www/tontine_app/templates/dette/edit.html.twig</file>
+            <file>file:/C:/wamp/www/tontine_app/src/Form/TontineType.php</file>
+            <file>file:/C:/wamp/www/tontine_app/src/Form/TypeTransactionType.php</file>
+            <file>file:/C:/wamp/www/tontine_app/templates/type_transaction/show.html.twig</file>
+            <file>file:/C:/wamp/www/tontine_app/templates/frais_mobile/new.html.twig</file>
+            <file>file:/C:/wamp/www/tontine_app/src/Controller/DetteController.php</file>
+            <file>file:/C:/wamp/www/tontine_app/templates/tontine/index.html.twig</file>
+            <file>file:/C:/wamp/www/tontine_app/src/Entity/Tontine.php</file>
+            <file>file:/C:/wamp/www/tontine_app/src/Controller/SecurityController.php</file>
+            <file>file:/C:/wamp/www/tontine_app/templates/tontine/_delete_form.html.twig</file>
+            <file>file:/C:/wamp/www/tontine_app/templates/transaction/new.html.twig</file>
+            <file>file:/C:/wamp/www/tontine_app/templates/transaction/_form.html.twig</file>
+            <file>file:/C:/wamp/www/tontine_app/src/Controller/TransactionController.php</file>
+            <file>file:/C:/wamp/www/tontine_app/templates/transaction/edit.html.twig</file>
+            <file>file:/C:/wamp/www/tontine_app/templates/security/login.html.twig</file>
+            <file>file:/C:/wamp/www/tontine_app/templates/base.html.twig</file>
+            <file>file:/C:/wamp/www/tontine_app/templates/tontine/new.html.twig</file>
+            <file>file:/C:/wamp/www/tontine_app/templates/transaction/show.html.twig</file>
+            <file>file:/C:/wamp/www/tontine_app/templates/frais_mobile/index.html.twig</file>
+            <file>file:/C:/wamp/www/tontine_app/src/Entity/Transaction.php</file>
+            <file>file:/C:/wamp/www/tontine_app/templates/dette/_delete_form.html.twig</file>
+            <file>file:/C:/wamp/www/tontine_app/templates/frais_mobile/edit.html.twig</file>
+            <file>file:/C:/wamp/www/tontine_app/templates/user/index.html.twig</file>
+            <file>file:/C:/wamp/www/tontine_app/templates/versement/index.html.twig</file>
+            <file>file:/C:/wamp/www/tontine_app/templates/frais_mobile/_form.html.twig</file>
+            <file>file:/C:/wamp/www/tontine_app/src/Form/VersementType.php</file>
+            <file>file:/C:/wamp/www/tontine_app/templates/dette/_form.html.twig</file>
+            <file>file:/C:/wamp/www/tontine_app/src/Entity/User.php</file>
+            <file>file:/C:/wamp/www/tontine_app/templates/dette/index.html.twig</file>
+            <file>file:/C:/wamp/www/tontine_app/src/Controller/FraisMobileController.php</file>
+            <file>file:/C:/wamp/www/tontine_app/templates/tontine/_form.html.twig</file>
+            <file>file:/C:/wamp/www/tontine_app/templates/tontine/show.html.twig</file>
+            <file>file:/C:/wamp/www/tontine_app/src/Controller/TontineController.php</file>
+            <file>file:/C:/wamp/www/tontine_app/src/Security/LoginFormAuthenticator.php</file>
+            <file>file:/C:/wamp/www/tontine_app/templates/transaction/index.html.twig</file>
+            <file>file:/C:/wamp/www/tontine_app/src/Entity/Dette.php</file>
+            <file>file:/C:/wamp/www/tontine_app/src/Form/UserType.php</file>
+            <file>file:/C:/wamp/www/tontine_app/templates/dette/show.html.twig</file>
+            <file>file:/C:/wamp/www/tontine_app/src/Form/DetteType.php</file>
+            <file>file:/C:/wamp/www/tontine_app/templates/user/_form.html.twig</file>
+        </group>
+    </open-files>
+</project-private>

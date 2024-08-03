@@ -1,0 +1,317 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Tableau de bord{% endblock %}
+
+{% block body %}
+
+    {% set stats = app.user.entreprise.stats() %}
+
+    {% if is_granted('ROLE_ADMIN') %}
+        
+        <div class="row row-sm">
+            <div class="col-xl-3 col-lg-6 col-sm-6 col-md-6">
+                <div class="card text-center">
+                    <div class="card-body ">
+                        <div class="feature widget-2 text-center mt-0 mb-3">
+                            <i class="ti-bar-chart project bg-success-transparent mx-auto text-success "></i>
+                        </div>
+                        <h6 class="mb-1 text-muted">Vente articles</h6>
+                        <h3 class="font-weight-semibold">{{ stats["montantVentes"]|number_format(0, ',', '.') }} FCFA</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-lg-6 col-sm-6 col-md-6">
+                <div class="card text-center">
+                    <div class="card-body ">
+                        <div class="feature widget-2 text-center mt-0 mb-3">
+                            <i class="ti-pie-chart project bg-danger-transparent mx-auto text-danger "></i>
+                        </div>
+                        <h6 class="mb-1 text-muted">Achat articles</h6>
+                        <h3 class="font-weight-semibold">{{ stats["achatArticle"]|number_format(0, ',', '.') }} FCFA</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-lg-6 col-sm-6 col-md-6">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <div class="feature widget-2 text-center mt-0 mb-3">
+                            <i class="ti-pulse  project bg-teal-transparent mx-auto text-teal "></i>
+                        </div>
+                        <h6 class="mb-1 text-muted">Bénéfice sur ventes</h6>
+                        <h3 class="font-weight-semibold">{{ (stats["montantVentes"]-stats["montantAchats"])|number_format(0, ',', '.') }} FCFA</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-lg-6 col-sm-6 col-md-6">
+                <div class="card text-center">
+                    <div class="card-body ">
+                        <div class="feature widget-2 text-center mt-0 mb-3">
+                            <i class="fe fe-truck project bg-primary-transparent mx-auto text-primary"></i>
+                        </div>
+                        <h6 class="mb-1 text-muted">Total frais livraison</h6>
+                        <h3 class="font-weight-semibold">{{ stats["montantLivraisons"]|number_format(0, ',', '.') }} FCFA</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
+    {% if is_granted('ROLE_FIN') %}
+        <div class="row row-sm">
+            <div class="col-xl-3 col-lg-6 col-sm-6 col-md-6">
+                <div class="card text-center">
+                    <div class="card-body ">
+                        <div class="feature widget-2 text-center mt-0 mb-3">
+                            <i class="fe fe-dollar-sign project bg-teal-transparent mx-auto text-teal"></i>
+                        </div>
+                        <h6 class="mb-1 text-muted">En caisse</h6>
+{#                        <h3 class="font-weight-semibold">{{ (stats["montantVentes"]+stats["montantLivraisons"]+stats["montantEntrees"]-stats["montantSorties"])|number_format(0, ',', '.') }} FCFA</h3>#}
+                        <h3 class="font-weight-semibold">{{ (stats["montantReglement"]+stats["montantEntrees"]-stats["montantSorties"])|number_format(0, ',', '.') }} FCFA</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-lg-6 col-sm-6 col-md-6">
+                <div class="card text-center">
+                    <div class="card-body ">
+                        <div class="feature widget-2 text-center mt-0 mb-3">
+                            <i class="fe fe-dollar-sign project bg-danger-transparent mx-auto text-danger"></i>
+                        </div>
+                        <h6 class="mb-1 text-muted">Dépenses annexes</h6>
+                        <h3 class="font-weight-semibold">{{ stats["montantSorties"]|number_format(0, ',', '.') }} FCFA</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-lg-6 col-sm-6 col-md-6">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <div class="feature widget-2 text-center mt-0 mb-3">
+                            <i class="fe fe-dollar-sign project bg-success-transparent mx-auto text-success"></i>
+                        </div>
+                        <h6 class="mb-1 text-muted">Entrées annexes</h6>
+                        <h3 class="font-weight-semibold">{{ stats["montantEntrees"]|number_format(0, ',', '.') }} FCFA</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-lg-6 col-sm-6 col-md-6">
+                <div class="card text-center">
+                    <div class="card-body ">
+                        <div class="feature widget-2 text-center mt-0 mb-3">
+                            <i class="fe fe-user project bg-primary-transparent mx-auto text-primary "></i>
+                        </div>
+                        <h6 class="mb-1 text-muted">Nombre de livreurs</h6>
+                        <h3 class="font-weight-semibold">{{ stats["nombreAgents"] }}</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row row-sm">
+            <div class="col-xl-3 col-lg-6 col-sm-6 col-md-6">
+                <div class="card text-center">
+                    <div class="card-body ">
+                        <div class="feature widget-2 text-center mt-0 mb-3">
+                            <i class="fe fe-shopping-cart project bg-pink-transparent mx-auto text-pink"></i>
+                        </div>
+                        <h6 class="mb-1 text-muted">En attente de reglement</h6>
+                        <h3 class="font-weight-semibold">{{ stats["nbreAttenteReglement"] }}</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-lg-6 col-sm-6 col-md-6">
+                <div class="card text-center">
+                    <div class="card-body ">
+                        <div class="feature widget-2 text-center mt-0 mb-3">
+                            <i class="fe fe-dollar-sign project bg-pink-transparent mx-auto text-pink"></i>
+                        </div>
+                        <h6 class="mb-1 text-muted">Montant à régler</h6>
+                        <h3 class="font-weight-semibold">{{ stats["montantAttenteReglement"]|number_format(0, ',', '.') }} FCFA</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-lg-6 col-sm-6 col-md-6">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <div class="feature widget-2 text-center mt-0 mb-3">
+                            <i class="fe fe-shopping-cart project bg-teal-transparent mx-auto text-teal"></i>
+                        </div>
+                        <h6 class="mb-1 text-muted">Commandes réglées</h6>
+                        <h3 class="font-weight-semibold">{{ stats["nbreReglement"] }}</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-lg-6 col-sm-6 col-md-6">
+                <div class="card text-center">
+                    <div class="card-body ">
+                        <div class="feature widget-2 text-center mt-0 mb-3">
+                            <i class="fe fe-dollar-sign project bg-teal-transparent mx-auto text-teal"></i>
+                        </div>
+                        <h6 class="mb-1 text-muted">Montant versé</h6>
+                        <h3 class="font-weight-semibold">{{ stats["montantReglement"]|number_format(0, ',', '.') }} FCFA</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
+    {% if is_granted('ROLE_COM') or is_granted('ROLE_LOG') or is_granted('ROLE_LIV') %}
+        <div class="row row-sm">
+            <div class="col-xl-3 col-lg-6 col-sm-6 col-md-6">
+                <div class="card text-center">
+                    <a href="#{#{% if is_granted('ROLE_LOG') %} {{ path('dashboard_filtre_commande', {'filtre': 'listeLivraisonAttente', 'type': 'logistic'}) }} {% else %} {{ path('dashboard_filtre_commande', {'filtre': 'listeLivraisonAttente', 'type': 'commercial'}) }} {% endif %}#}">
+                        <div class="card-body ">
+                            <div class="feature widget-2 text-center mt-0 mb-3">
+                                <i class="fe fe-shopping-cart project bg-primary-transparent mx-auto text-primary "></i>
+                            </div>
+                            <h6 class="mb-1 text-muted">En attente de livraison</h6>
+                            <h3 class="font-weight-semibold"> {{ stats["commandeLivraisonAttente"] }} </h3>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <div class="col-xl-3 col-lg-6 col-sm-6 col-md-6">
+                <div class="card text-center">
+                    <a href="#{#{% if is_granted('ROLE_LOG') %} {{ path('dashboard_filtre_commande', {'filtre': 'listeLivraisonAttente', 'type': 'logistic'}) }} {% else %} {{ path('dashboard_filtre_commande', {'filtre': 'listeLivraisonAttente', 'type': 'commercial'}) }} {% endif %}#}">
+                        <div class="card-body ">
+                            <div class="feature widget-2 text-center mt-0 mb-3">
+                                <i class="fe fe-shopping-cart project bg-primary-transparent mx-auto text-primary "></i>
+                            </div>
+                            <h6 class="mb-1 text-muted">Livraison en cours</h6>
+                            <h3 class="font-weight-semibold"> {{ stats["commandeLivraisonCours"] }} </h3>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <div class="col-xl-3 col-lg-6 col-sm-6 col-md-6">
+                <div class="card text-center">
+                    <a href="#{#{% if is_granted('ROLE_LOG') %} {{ path('dashboard_filtre_commande', {'filtre': 'listeLivraisonReception', 'type': 'logistic'}) }} {% else %} {{ path('dashboard_filtre_commande', {'filtre': 'listeLivraisonReception', 'type': 'commercial'}) }} {% endif %}#}">
+                        <div class="card-body ">
+                            <div class="feature widget-2 text-center mt-0 mb-3">
+                                <i class="fe fe-shopping-cart project bg-success-transparent mx-auto text-success "></i>
+                            </div>
+                            <h6 class="mb-1 text-muted">Commandes livrées</h6>
+                            <h3 class="font-weight-semibold"> {{ stats["commandeLivraisonValide"] }} </h3>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <div class="col-xl-3 col-lg-6 col-sm-6 col-md-6">
+                <div class="card text-center">
+                    <a href="#{#{% if is_granted('ROLE_LOG') %} {{ path('dashboard_filtre_commande', {'filtre': 'listeLivraisonReception', 'type': 'logistic'}) }} {% else %} {{ path('dashboard_filtre_commande', {'filtre': 'listeLivraisonReception', 'type': 'commercial'}) }} {% endif %}#}">
+                        <div class="card-body ">
+                            <div class="feature widget-2 text-center mt-0 mb-3">
+                                <i class="fe fe-shopping-cart project bg-success-transparent mx-auto text-success "></i>
+                            </div>
+                            <h6 class="mb-1 text-muted">Commandes comptabilisés</h6>
+                            <h3 class="font-weight-semibold"> {{ stats["commandeComptabilite"] }} </h3>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <div class="col-xl-3 col-lg-6 col-sm-6 col-md-6">
+                <div class="card text-center">
+                    <a href="#{#{% if is_granted('ROLE_LOG') %} {{ path('dashboard_filtre_commande', {'filtre': 'listeLivraisonRetour', 'type': 'logistic'}) }} {% else %} {{ path('dashboard_filtre_commande', {'filtre': 'listeLivraisonRetour', 'type': 'commercial'}) }} {% endif %}#}">
+                        <div class="card-body">
+                            <div class="feature widget-2 text-center mt-0 mb-3">
+                                <i class="fe fe-shopping-cart project bg-danger-transparent mx-auto text-danger "></i>
+                            </div>
+                            <h6 class="mb-1 text-muted">Livraison non validées</h6>
+                            <h3 class="font-weight-semibold"> {{ stats["commandeLivraisonAgent"] }} </h3>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <div class="col-xl-3 col-lg-6 col-sm-6 col-md-6">
+                <div class="card text-center">
+                    <a href="#{#{% if is_granted('ROLE_LOG') %} {{ path('dashboard_filtre_commande', {'filtre': 'listeLivraisonAttente', 'type': 'logistic'}) }} {% else %} {{ path('dashboard_filtre_commande', {'filtre': 'listeLivraisonAttente', 'type': 'commercial'}) }} {% endif %}#}">
+                        <div class="card-body ">
+                            <div class="feature widget-2 text-center mt-0 mb-3">
+                                <i class="fe fe-shopping-cart project bg-primary-transparent mx-auto text-primary "></i>
+                            </div>
+                            <h6 class="mb-1 text-muted">Commandes en attente chez le LOG</h6>
+                            <h3 class="font-weight-semibold"> {{ stats["commandeLogAttente"] }} </h3>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <div class="col-xl-3 col-lg-6 col-sm-6 col-md-6">
+                <div class="card text-center">
+                    <a href="#{#{% if is_granted('ROLE_COM') %} {{ path('dashboard_filtre_commande', {'filtre': 'listeNonValide', 'type': 'commercial'}) }} {% else %} # {% endif %}#}">
+                        <div class="card-body ">
+                            <div class="feature widget-2 text-center mt-0 mb-3">
+                                <i class="fe fe-shopping-cart project bg-warning-transparent mx-auto text-warning "></i>
+                            </div>
+                            <h6 class="mb-1 text-muted">Commandes non validées</h6>
+                            <h3 class="font-weight-semibold"> {{ stats["commandeNonValide"] }} </h3>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <div class="col-xl-3 col-lg-6 col-sm-6 col-md-6">
+                <div class="card text-center">
+                    <a href="#{#{% if is_granted('ROLE_LOG') %} {{ path('dashboard_filtre_commande', {'filtre': 'listeLivraisonRetour', 'type': 'logistic'}) }} {% else %} {{ path('dashboard_filtre_commande', {'filtre': 'listeLivraisonRetour', 'type': 'commercial'}) }} {% endif %}#}">
+                        <div class="card-body">
+                            <div class="feature widget-2 text-center mt-0 mb-3">
+                                <i class="fe fe-shopping-cart project bg-danger-transparent mx-auto text-danger "></i>
+                            </div>
+                            <h6 class="mb-1 text-muted">Commandes annulées</h6>
+                            <h3 class="font-weight-semibold"> {{ stats["commandeAnnule"] }} </h3>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="row row-sm">
+            <div class="col-xl-3 col-lg-6 col-sm-6 col-md-6">
+                <div class="card text-center">
+                    <a href="#{#{% if is_granted('ROLE_LOG') %} {{ path('dashboard_filtre_article', {'filtre': 'listeEnCours', 'type': 'logistic'}) }} {% else %} # {% endif %}#}">
+                        <div class="card-body ">
+                            <div class="feature widget-2 text-center mt-0 mb-3">
+                                <i class="fe fe-box project bg-primary-transparent mx-auto text-primary "></i>
+                            </div>
+                            <h6 class="mb-1 text-muted">Articles en cours de commande</h6>
+                            <h3 class="font-weight-semibold"> {{ stats["commandeArticleEncours"] ? stats["commandeArticleEncours"] : '0' }} </h3>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <div class="col-xl-3 col-lg-6 col-sm-6 col-md-6">
+                <div class="card text-center">
+                    <a href="#{#{% if is_granted('ROLE_LOG') %} {{ path('dashboard_filtre_article', {'filtre': 'listeVenteInterne', 'type': 'logistic'}) }} {% else %} # {% endif %}#}">
+                        <div class="card-body ">
+                            <div class="feature widget-2 text-center mt-0 mb-3">
+                                <i class="fe fe-box project bg-success-transparent mx-auto text-success "></i>
+                            </div>
+                            <h6 class="mb-1 text-muted">Articles internes vendus</h6>
+                            <h3 class="font-weight-semibold"> {{ stats["commandeArticleVenteInterne"] ? stats["commandeArticleVenteInterne"] : '0' }} </h3>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <div class="col-xl-3 col-lg-6 col-sm-6 col-md-6">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <div class="feature widget-2 text-center mt-0 mb-3">
+                            <i class="fe fe-box project bg-teal-transparent mx-auto text-teal "></i>
+                        </div>
+                        <h6 class="mb-1 text-muted">Articles externes vendus</h6>
+                        <h3 class="font-weight-semibold">{{ stats["commandeArticleVenteExterne"] ? stats["commandeArticleVenteExterne"] : '0' }}</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-lg-6 col-sm-6 col-md-6">
+                <div class="card text-center">
+                    <div class="card-body ">
+                        <div class="feature widget-2 text-center mt-0 mb-3">
+                            <i class="fe fe-box project bg-danger-transparent mx-auto text-danger "></i>
+                        </div>
+                        <h6 class="mb-1 text-muted">Réapprovisionnements à faire</h6>
+                        <h3 class="font-weight-semibold"> {{ stats["articleReapprovisonnement"] ? stats["articleReapprovisonnement"] : '0' }} </h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
+{% endblock %}
+

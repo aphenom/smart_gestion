@@ -1,0 +1,326 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Logistique Commande{% endblock %}
+
+{% block css %}
+    <!-- Internal Data table css -->
+    <link href="{{ asset('plugins/datatable/css/dataTables.bootstrap4.min.css') }}" rel="stylesheet" />
+    <link href="{{ asset('plugins/datatable/css/buttons.bootstrap4.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('plugins/datatable/css/responsive.bootstrap4.min.css') }}" rel="stylesheet" />
+    <link href="{{ asset('plugins/datatable/css/jquery.dataTables.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('plugins/datatable/css/responsive.dataTables.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('plugins/select2/css/select2.min.css') }}" rel="stylesheet">
+
+    {{ parent() }}
+
+{% endblock %}
+
+{% block body %}
+    <div class="row">
+        <div class="col-md-12 col-lg-6">
+            <div class="card">
+                <div class="card-header pb-0">
+                    <div class="row"><div class="col-lg-8 col-md-8 main-content-label"><h3>Commande</h3></div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <table class="table">
+                        <tbody>
+                            <tr>
+                                <th>#</th>
+                                <td>{{ commande.sku }}</td>
+                            </tr>
+                            <tr>
+                                <th>Type de commande</th>
+                                <td>{{ commande.typeCommande|upper }}</td>
+                            </tr>
+                            <tr>
+                                <th>Nom du client</th>
+                                <td>{{ commande.nomClient }}</td>
+                            </tr>
+                            <tr>
+                                <th>Contact du client</th>
+                                <td>{{ commande.numeroClient }}</td>
+                            </tr>
+                            {% if commande.typeCommande != 'locale' %}
+                                <tr>
+                                    <th>Lieu de livraison</th>
+                                    <td>{{ commande.lieuLivraison }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Date de livraison souhaitée</th>
+                                    <td>{{ commande.dateLivraisonSouhaite ? commande.dateLivraisonSouhaite|date('d-m-Y H:i:s') : '' }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Frais de livraison</th>
+                                    <td>{{ commande.fraisLivraison|number_format(0, ',', '.') }} FCFA</td>
+                                </tr>
+                            {% endif %}
+                            <tr>
+                                <th>Ajoutée le</th>
+                                <td>{{ commande.dateAdd ? commande.dateAdd|date('d-m-Y H:i:s') : '' }}</td>
+                            </tr>
+                            <tr>
+                                <th>Ajouté par </th>
+                                <td>{{ commande.userAdd.displayName }}</td>
+                            </tr>
+                            <tr>
+                                <th>Commentaire </th>
+                                <td>{{ commande.commentaire }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <a href="{{ path('commande_logistic_index') }}"><i class="fa fa-arrow-left"></i> Rétourner à la liste</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="card">
+                <div class="card-header pb-0">
+                    <div class="row"><div class="col-lg-8 col-md-8 main-content-label"><h3>Gestion</h3></div>
+                    </div>
+                </div>
+                <div class="card-body">
+
+                    <div class="alert alert-{{ commande.etat['etatCouleur'] }}" role="alert">
+                        <a href="#" class="alert-link">{{ commande.etat['etatLibelle'] }}</a> - <i>Depuis le {{ commande.etat['etatDate']  ? commande.etat['etatDate']|date('d-m-Y H:i:s') : '' }}</i>
+                    </div>
+
+                    {% if(commande.etatRetour == true) %}
+                        <div class="card bd-0 mg-b-20 bg-danger-transparent alert p-0">
+                            <div class="card-header text-danger font-weight-bold">
+                                <i class="far fa-times-circle"></i> Objet du retour
+                            </div>
+                            <div class="card-body text-danger">{{ commande.objetRetour }} </div>
+                        </div>
+                    {% endif %}
+
+                    {{ include('commande/_logistic_form.html.twig') }}
+
+
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered text-md-nowrap" id="example1">
+                            <thead>
+                                <tr>
+                                    <th class="wd-5p border-bottom-0">#</th>
+                                    <th class="wd-10p border-bottom-0">Code</th>                
+                                    <th class="wd-20p border-bottom-0">Nom</th>
+                                    <th class="wd-15p border-bottom-0">Image</th>
+                                    <th class="wd-15p border-bottom-0">Prix Unitaire Vente (FCFA)</th>
+                                    <th class="wd-15p border-bottom-0">Prix Unitaire Achat (FCFA)</th>
+                                    <th class="wd-5p border-bottom-0">Quantité</th>
+                                    <th class="wd-15p border-bottom-0">Prix total (FCFA)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for ca in commandeArticles|reverse %}
+                                    <tr>
+                                        <td>{{ loop.index}}</td>
+                                        <td>{{ ca.article.sku }}</td>
+                                        <td>{{ ca.article.nom }}</td>
+                                        <td>
+                                            {% if ca.article.etatProprio %}
+                                                <img alt="Responsive image" class="img-thumbnail wd-100p wd-sm-200" src="{{ vich_uploader_asset(ca.article, 'imageFile') }}">
+                                            {% else %}
+                                                Titulaire : {{ ca.article.nomProprio }}                                    
+                                            {% endif %}
+                                        </td>
+                                        <td>{{ ca.puVenteFinal|number_format(0, ',', '.') }}</td>
+                                        <td>{{ ca.puAchat|number_format(0, ',', '.') }}</td>
+                                        <td>{{ ca.quantite }}</td>
+                                        <td>{{ ca.total|number_format(0, ',', '.') }}</td>
+                                        {#<td><span class="badge {{ ca.article.etatVal ? 'badge-success' : 'badge-danger' }}">{{ ca.article.etatVal ? 'Actif' : 'Inactif' }}</span></td>#}
+                                    </tr>
+                                {% else %}
+                                    <tr>
+                                        <td colspan="10" align="center">Aucune donnée trouvée</td>
+                                    </tr>
+                                {% endfor %}
+                                <tr>
+                                    <td colspan="7" align="right">Total</td>
+                                    <td align="right">{{ commande.totalCommandeArticle|number_format(0, ',', '.') }} FCFA</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="7" align="right">Frais de livraison</td>
+                                    <td align="right">{{ commande.fraisLivraison|number_format(0, ',', '.') }} FCFA</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="7" align="right">Total Net à payer</td>
+                                    <td align="right">{{ commande.total|number_format(0, ',', '.') }} FCFA</td>
+                                </tr>
+                            </tbody>
+                        </table>                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block script %} 
+
+    {{ parent() }}
+    <!--- Select2 js --->
+    <script src="{{ asset('plugins/select2/js/select2.min.js') }}"></script>
+    <script type="text/javascript">
+        $("document").ready(function () {
+
+            $('.btn-start-lancement').fadeOut("slow");
+            $('.btn-cancel-lancement').fadeOut("slow");
+            $('#btn-cancel-lancement').fadeOut("slow");
+            $('select[data-select="true"').select2();
+            submitForm("");
+        });
+
+        function visibleForm(type) {
+            switch (type) {
+                case "start-lancement":
+                    // code block
+                    //$('#logistic_agent_livreur').attr('required', true);
+                    $('#logistic_commentaire').val("");
+                    $('#btn-start-lancement-view').fadeOut("slow");
+                    $('.btn-start-lancement').fadeIn("slow");
+                    break;
+                case "cancel-lancement":
+                    // code block
+                    //$('#logistic_objet_retour').attr('required', true);
+                    $('#logistic_objet_retour').val("");
+                    $('#btn-cancel-lancement').fadeOut("slow");
+                    $('.btn-cancel-lancement').fadeIn("slow");
+                    break;
+                case "start-lancement-hide":
+                    // code block
+                    //$('#logistic_agent_livreur').attr('required', false);
+                    $('#btn-start-lancement-view').fadeIn("slow");
+                    $('.btn-start-lancement').fadeOut("slow");
+                    break;
+                case "cancel-lancement-hide":
+                    // code block
+                    $('#logistic_objet_retour').val("");
+                    $('#logistic_objet_retour').attr('required', false);
+                    $('#btn-cancel-lancement').fadeIn("slow");
+                    $('.btn-cancel-lancement').fadeOut("slow");
+                    break;
+                    //default:
+                    // code block
+            }
+        }
+
+        function submitForm(type) {
+            //initialisation hidden
+            etat_val = $('#logistic_etat_val').val();
+            etat_relance = $('#logistic_etat_relance').val();
+            etat_lancement = $('#logistic_etat_lancement').val();
+            etat_livraison = $('#logistic_etat_livraison').val();
+            etat_retour = $('#logistic_etat_retour').val();
+            etat_reception = $('#logistic_etat_reception').val();
+            //initialisation btn
+            $('#btn-start-lancement-view').fadeOut("slow");
+            $('#btn-cancel-lancement-view').fadeOut("slow");
+            $('#btn-cancel-lancement-view').fadeOut("slow");
+
+            if (type != "") {
+
+                switch (type) {
+                    case "start-lancement":
+                        // code block
+                        r = confirm('Êtes-vous sûr(e) de vouloir lancer le traitement de cette commande ?');
+                        if (r == true) {
+                            $('#logistic_etat_val').val(1);
+                            $('#logistic_etat_relance').val(etat_relance);
+                            $('#logistic_etat_lancement').val(1);
+                            $('#logistic_etat_livraison').val(0);
+                            $('#logistic_etat_retour').val(0);
+                            $('#logistic_etat_reception').val(0);
+                            $("#myForm").submit();
+                        } else {
+                            $('#btn-start-livraison-view').fadeIn("slow");
+                        }
+                        break;
+
+                    case "cancel-lancement":
+                        // code block
+                        r = confirm('Êtes-vous sûr(e) de vouloir annuler le traitement de cette commande (Echec) ?');
+                        if (r == true) {
+                            $('#logistic_etat_val').val(1);
+                            $('#logistic_etat_relance').val(etat_relance);
+                            $('#logistic_etat_lancement').val(0);
+                            $('#logistic_etat_livraison').val(0);
+                            $('#logistic_etat_retour').val(0);
+                            $('#logistic_etat_reception').val(0);
+                            $("#myForm").submit();
+                        } else {
+                            $('#btn-stop-livraison').fadeIn("slow");
+                            $('#btn-cancel-livraison-view').fadeIn("slow");
+                            $('#btn-finish-livraison').fadeIn("slow");
+                        }
+                        break;
+                        //default:
+                        // code block
+                }
+            }
+            //locale
+            else {
+                if (etat_lancement == 1) {
+                    //$('#btn-stop-livraison').fadeIn("slow");
+                    $('#btn-cancel-lancement').fadeIn("slow");
+                    //$('#btn-finish-livraison').fadeIn("slow");
+                    if (etat_livraison == 1 || etat_reception == 1) {
+                        $('#btn-cancel-lancement').fadeOut("slow");
+                        $('#btn-cancel-lancement-view').fadeOut("slow");
+                    }
+                } else {
+                    $('#btn-start-lancement-view').fadeIn("slow");
+                    $('#btn-cancel-lancement-view').fadeOut("slow");
+                }
+            }
+
+        }
+
+        function redirectStatut(statut) {
+            
+            switch (statut) {
+            case "lancement-relance":
+                var text = "Voulez-vous vraiment signaler cette commande à relancer ? \n";
+                break;
+            case "lancement-annule":
+                var text = "Voulez-vous vraiment annuler définitivement cette commande ? \n";
+                break;
+            case "livraison-relance":
+                var text = "Voulez-vous vraiment signaler cette commande à relancer ? \n";
+                break;
+            case "livraison-annule":
+                var text = "Voulez-vous vraiment annuler définitivement cette commande ? \n";
+                break;
+        }
+            var reference = prompt(text + "Si oui, vous pouvez ajouter un commentaire à cette action !");
+            if (reference == null) {
+                //document.getElementById(val + "_form").submit(false);
+                return false;
+            } else {
+                //document.getElementById(val + "_comment").value = reference;
+                if (reference == "") {
+                    reference = "null";
+                }
+                var str = "{{ path('commande_change_statut', {'id': commande.id, 'statut': "statut", 'reference': "null"}) }}";
+                var res0 = str.replace("statut", statut);
+                var res = res0.replace("null", reference);
+                window.href(location = res);
+                //$('#'+val+'_comment').val(commentaire);
+                //document.getElementById(val + "_form").submit();
+                return true;
+            }
+
+        }
+
+
+    </script>
+
+{% endblock %} 

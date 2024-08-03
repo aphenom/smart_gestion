@@ -1,0 +1,24 @@
+{#<form method="post" action="{{ path('article_delete', {'id': article.id}) }}" onsubmit="return confirm('Are you sure you want to delete this item?');">
+    <input type="hidden" name="_method" value="DELETE">
+    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ article.id) }}">
+    <button class="btn">Delete</button>
+</form>#}
+
+
+{% if(article.etatVal == true) %}
+
+    <form method="post" action="{{ path('article_desactivate', {'id': article.id}) }}" onsubmit="return confirm('Êtes-vous sûre de vouloir désactiver cet enregistrement ?');">
+        <input type="hidden" name="_method" value="POST">
+        <input type="hidden" name="_token" value="{{ csrf_token('desactivate' ~ article.id) }}">
+        <button class="btn btn-danger">Désactiver</button>
+    </form>
+
+{% else %}
+
+    <form method="post" action="{{ path('article_activate', {'id': article.id}) }}" onsubmit="return confirm('Êtes-vous sûre de vouloir réactiver cet enregistrement ?');">
+        <input type="hidden" name="_method" value="POST">
+        <input type="hidden" name="_token" value="{{ csrf_token('activate' ~ article.id) }}">
+        <button class="btn btn-success">Activer</button>
+    </form>
+
+{% endif %}

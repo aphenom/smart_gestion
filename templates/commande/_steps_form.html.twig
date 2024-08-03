@@ -1,0 +1,146 @@
+{{ form_start(form, {'attr': {'class': 'form-valide', 'id': 'myForm', 'onSubmit':"return false"}}) }}
+
+<div class="control-group form-group btn-start-lancement">
+
+    {#  
+    <div id="bloc-lancement" style="display:{% if(commande.etat['etat'] == "val" and is_granted('ROLE_LOG')) %}block{% else %}none{% endif %}">
+    
+        </div>
+    
+        <div id="bloc-livraison"  style="display:{% if(commande.etat['etat'] == "lancement" and is_granted('ROLE_LIV')) %}block{% else %}none{% endif %}">
+    
+        </div>
+    
+        <div id="bloc-livraison-agent"  style="display:{% if(commande.etat['etat'] == "livraison" and is_granted('ROLE_AGENT')) %}block{% else %}none{% endif %}">
+    
+        </div>
+    
+        <div id="bloc-livraison-val"  style="display:{% if(commande.etat['etat'] == "livraison-agent" and is_granted('ROLE_LIV')) %}block{% else %}none{% endif %}">
+    
+        </div>
+    
+        <div id="bloc-comptabilite" style="display:{% if(commande.etat['etat'] == "livraison-val" and is_granted('ROLE_FIN')) %}block{% else %}none{% endif %}">
+    
+        </div>
+    
+        <div id="bloc-global" style="display:{% if((commande.etat['etat'] == "val" and commande.etatLancement == false) or (commande.etat['etat'] == "lancement" and commande.etatLivraison == false) or (commande.etat['etat'] == "livraison" and commande.etatLivraisonAgent == false) or (commande.etat['etat'] == "livraisonAgent" and commande.etatLivraisonVal == false)) %}block{% else %}none{% endif %}">
+    
+        </div>
+    #}
+
+    {% if(is_granted('ROLE_LOG') and commande.etatProprio == true) %}
+
+        {% if(commande.etat['etat'] == "val") %}
+            <a href="#message-info" class="btn mb-1 btn-primary btn-xs" id="btn-start-lancement" onclick="visibleForm('start-lancement', this)">Lancer le traitement</a>
+        {% endif %}
+
+        {% if(commande.etat['etat'] == "lancement") %}
+            <a href="#message-info" id="btn-cancel-lancement" onclick="visibleForm('cancel-lancement', this)" class="btn mb-1 btn-dark btn-xs">Annuler le traitement</a>
+        {% endif %}
+
+    {% endif %}
+
+    {% if(is_granted('ROLE_LIV')) %}
+
+        {% if(commande.etat['etat'] == "lancement") %}
+            <a href="#message-info" class="btn mb-1 btn-primary btn-xs" id="btn-start-livraison" onclick="visibleForm('start-livraison', this)">Lancer livraison</a>
+        {% endif %}
+
+        {% if(commande.etat['etat'] == "livraison") %}
+            <a href="#message-info" id="btn-cancel-livraison" onclick="visibleForm('cancel-livraison', this)" class="btn mb-1 btn-dark btn-xs">Annuler la livraison</a>
+        {% endif %}
+
+    {% endif %}
+
+    {% if(is_granted('ROLE_AGENT')) %}
+
+        {% if(commande.etat['etat'] == "livraison") %}
+            <a href="#message-info" class="btn mb-1 btn-primary btn-xs" id="btn-start-livraison-agent" onclick="visibleForm('start-livraison-agent', this)">Valider commande livraison</a>
+        {% endif %}
+
+        {% if(commande.etat['etat'] == "livraison-agent") %}
+            <a href="#message-info" id="btn-cancel-livraison-agent" onclick="visibleForm('cancel-livraison-agent', this)" class="btn mb-1 btn-dark btn-xs">Annuler commande livraison</a>
+        {% endif %}
+
+    {% endif %}
+
+    {% if(is_granted('ROLE_LIV')) %}
+
+        {% if(commande.etat['etat'] == "livraison-agent") %}
+            <a href="#message-info" class="btn mb-1 btn-primary btn-xs" id="btn-start-livraison-val" onclick="visibleForm('start-livraison-val', this)">Valider livraison</a>
+        {% endif %}
+
+        {% if(commande.etat['etat'] == "livraison-val") %}
+            <a href="#message-info" id="btn-cancel-livraison-val" onclick="visibleForm('cancel-livraison-val', this)" class="btn mb-1 btn-dark btn-xs">Annuler validation</a>
+        {% endif %}
+
+    {% endif %}
+
+    {% if(is_granted('ROLE_FIN')) %}
+
+        {% if(commande.etat['etat'] == "livraison-val") %}
+            <a href="#message-info" class="btn mb-1 btn-primary btn-xs" id="btn-start-comptabilite" onclick="visibleForm('start-comptabilite', this)">Valider comptabilité</a>
+        {% endif %}
+
+        {% if(commande.etat['etat'] == "comptabilite") %}
+            <a href="#message-info" id="btn-cancel-comptabilite" onclick="visibleForm('cancel-comptabilite', this)" class="btn mb-1 btn-dark btn-xs">Annuler comptabilité</a>
+        {% endif %}
+
+    {% endif %}
+
+    {% if((commande.etat['etat'] == "val" and commande.etatLancement == false and is_granted('ROLE_LOG')) or (commande.etat['etat'] == "lancement" and commande.etatLivraison == false and commande.etatProprio == true and is_granted('ROLE_LIV')) or (commande.etat['etat'] == "livraison" and commande.etatLivraisonAgent == false and is_granted('ROLE_AGENT')) or (commande.etat['etat'] == "livraisonAgent" and commande.etatLivraisonVal == false and commande.etatProprio == true and is_granted('ROLE_LIV'))) %}
+        <a href="#message-info" id="btn-relance" onClick="visibleForm('relance', this)" class="btn mb-1 btn-warning btn-xs">A relancer</a>
+
+        <a href="#message-info" id="btn-delete" onClick="visibleForm('delete', this)" class="btn mb-1 btn-danger btn-xs">Annuler définitivement</a>
+    {% endif %}
+
+    {% if((is_granted('ROLE_LOG') and commande.etatProprio == true) or is_granted('ROLE_LIV') and commande.etatProprio == false) %}
+        <a href="#message-info" onclick="print('{{ path('commande_facture', {'id': commande.id}) }}')" class="btn mb-1 btn-info btn-xs" id="btn-print" >Imprimer la facture</a>
+
+{#        <div id="print-loader" style="align:center; display:block">
+            <img src="{{ asset('img/loaders/loader-4.svg') }}" class="loader-img" alt="Loader">
+        </div>
+#}
+    {% endif %}
+
+</div>
+
+<div id="form-bloc" style="display: none">
+
+    <div class="control-group form-group" id="form-agent" style="display: none">
+        {# Génération du label. #}
+        {{ form_label(form.agent_livreur, "Agent Livreur *", {'label_attr': {'class': 'form-label'}})
+        }}
+        {# Affichage des erreurs pour ce champ précis. #}
+        {{ form_errors(form.agent_livreur) }}
+        {# Génération de l'input. #}
+        {{ form_widget(form.agent_livreur, {'attr': {'class': 'form-control', 'placeholder':"Agent livreur"}})
+        }}
+    </div>
+
+
+    <div class="control-group form-group" id="form-commentaire">
+        {# Génération du label. #}
+        {{ form_label(form.commentaire, "Commentaire ", {'label_attr': {'class': 'form-label'}})
+        }}
+        {# Affichage des erreurs pour ce champ précis. #}
+        {{ form_errors(form.commentaire) }}
+        {# Génération de l'input. #}
+        {{ form_widget(form.commentaire, {'attr': {'class': 'form-control', 'placeholder':"Commentaire"}})
+        }}
+    </div>
+
+    <div class="control-group form-group">
+        <a class="btn btn-info pd-x-30 mg-r-5 mg-t-5" onclick="" id="form-submit">{{ button_label|default('Lancer le traitement') }}</a>
+        <input type="reset" class="btn btn-dark pd-x-30 mg-t-5" value="Annuler" id="form-cancel" onclick="">
+    </div>
+
+    <div class="control-group form-group">
+        <div class="alert alert-secondary">Les champs marqués par (*) doivent être obligatoirement
+            remplis.<br />
+            <!--Pour les champs marqués par (**) ; au minimum l'un d'entre eux doit être rempli.-->
+        </div>
+    </div>
+</div>
+{{ form_widget(form) }}
+{{ form_end(form) }}

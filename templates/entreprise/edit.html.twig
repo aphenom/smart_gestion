@@ -1,0 +1,90 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier Entreprise{% endblock %}
+
+{% block body %}
+    <div class="row">
+        <div class="col-lg-12 col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="main-content-label mg-b-5">
+                        <h3>Modifier Entreprise</h3>
+                    </div>
+
+                    {{ include('entreprise/_form.html.twig', {'button_label': 'Modifier'}) }}
+
+                    <div class="row m-b-30">
+                        <div class="col-auto"><a class="btn mb-1 btn-outline-primary" href="{{ path('entreprise_index') }}"><i class="fa fa-arrow-left"></i> Rétourner à la liste</a></div>
+                        <div class="col-auto">{{ include('entreprise/_delete_form.html.twig') }}</div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>       
+{% endblock %}
+
+
+{% block script %} 
+
+    {{ parent() }}
+
+    <script type="text/javascript">
+        $("document").ready(function () {
+
+            $('#entreprise_message_1').keyup(function () {
+                verifCaractere(1)
+            });
+            $('#entreprise_message_2').keyup(function () {
+                verifCaractere(2)
+            });
+            $('#entreprise_message_3').keyup(function () {
+                verifCaractere(3)
+            });
+            $('#entreprise_message_4').keyup(function () {
+                verifCaractere(4)
+            });
+            $('#entreprise_message_5').keyup(function () {
+                verifCaractere(5)
+            });
+
+        });
+
+        function verifCaractere(number) {
+            // alert(number);
+            var nombreCaractere = $("#entreprise_message_" + number).val().length;
+            // On soustrait le nombre limite au nombre de caractère existant
+            var nombreCaractere = 160 - nombreCaractere;
+            var nombreMots = jQuery.trim($("#entreprise_message_" + number).val()).split(' ').length;
+            if ($("#entreprise_message_" + number).val() === '') {
+                nombreMots = 0;
+            }
+
+            str = $("#entreprise_message_" + number).val();
+            variables = ["{nom_client}", "{numero_commande}", "{montant_commande}", "{montant_livraison}", "{montant_total}", "{nom_livreur}", "{contact_livreur}", "{date_livraison}"];
+
+            for (var i = 0; i < variables.length; i++) {
+                if (str.includes(variables[i])) {
+                    var regex = new RegExp(variables[i], "g");
+                    var count = (str.match(regex) || []).length;
+                    //alert(count);
+                    nombreCaractere = nombreCaractere + (variables[i].length * count);
+                    nombreMots--;
+                }
+            }
+
+{#            var msg = ' ' + nombreMots + ' mot(s) | ' + nombreCaractere + ' Caractere(s) restant';#}
+            var msg = nombreCaractere + ' Caractere(s) restant';
+            $('#compteur' + number).text(msg);
+            // On écris le nombre de caractère en rouge si celui si est inférieur à 0 
+            // La limite est donc dépasse
+            if (nombreCaractere < 0) {
+                $('#compteur' + number).addClass("mauvais");
+            } else {
+                $('#compteur' + number).removeClass("mauvais");
+            }
+
+        }
+
+    </script>
+{% endblock %} 

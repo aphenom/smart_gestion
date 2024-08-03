@@ -1,0 +1,271 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Fiche Livreur{% endblock %}
+
+{% block body %}
+    <div class="row">
+        <div class="col-lg-6 col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="main-content-label mg-b-5">
+                        <h3>Fiche Livreur</h3>
+                    </div>
+
+                    <table class="table">
+                        <tbody>
+                            <tr>
+                                <th>Identifiant</th>
+                                <td>{{ agent.user.username }}</td>
+                            </tr>
+                            <tr>
+                                <th>Nom</th>
+                                <td>{{ agent.nom }}</td>
+                            </tr>
+                            <tr>
+                                <th>Prénom(s)</th>
+                                <td>{{ agent.prenom }}</td>
+                            </tr>
+                            <tr>
+                                <th>Contact</th>
+                                <td>{{ agent.contact }}</td>
+                            </tr>
+                            <tr>
+                                <th>Type Pièce Identité</th>
+                                <td>{{ agent.libelleTypePiece }}</td>
+                            </tr>
+                            <tr>
+                                <th>Numéro Pièce Identité</th>
+                                <td>{{ agent.numeroPiece }}</td>
+                            </tr>
+                            <tr>
+                                <th>Date Ajout</th>
+                                <td>{{ agent.dateAdd ? agent.dateAdd|date('d-m-Y H:i:s') : '' }}</td>
+                            </tr>
+                            {#            <tr>
+                                            <th>Date_del</th>
+                                            <td>{{ agent.dateDel ? agent.dateDel|date('Y-m-d H:i:s') : '' }}</td>
+                                        </tr>#}
+                            <tr>
+                                <th>Etat</th>
+                                <td><span class="badge {{ agent.etatVal ? 'badge-success' : 'badge-danger' }}">{{ agent.etatVal ? 'Actif' : 'Inactif' }}</span></td>
+                            </tr>
+                            {#            <tr>
+                                            <th>Etat_del</th>
+                                            <td>{{ agent.etatDel ? 'Yes' : 'No' }}</td>
+                                        </tr>#}
+                        </tbody>
+                    </table>
+
+                    <div class="row m-b-30">
+                        <div class="col-auto"><a class="btn mb-1 btn-outline-primary" href="{{ path('agent_index') }}"><i class="fa fa-arrow-left"></i> Rétourner à la liste</a></div>
+                        <div class="col-auto"><a class="btn mb-1 btn-primary" href="{{ path('agent_edit', {'id': agent.id}) }}">Modifier</a></div>
+                    </div>
+                    <div class="row m-b-30">
+                        <div class="col-auto"> 
+                            {{ include('agent/_delete_form.html.twig') }}
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6">
+            <div class="card">
+                <div class="card-header pb-0">
+                    <div class="row"><div class="col-lg-8 col-md-8 main-content-label"><h3>Statistiques</h3></div>
+                    </div>
+                </div>
+
+                <form name="date" method="post" class="col-lg-12 col-md-12 form-valide">
+
+                    <div class="row control-group form-group">
+                        <div class="col-lg-5 col-md-5 form-group">
+                            <label class="form-label" for="date_debut">Date de début </label>
+
+                            <input type="datetime-local" id="date_debut" name="date_debut" class="form-control" placeholder="Date de début" required value="{{ date_debut }}">
+                        </div>
+                        <div class="col-lg-5 col-md-5 form-group">
+                            <label class="form-label" for="date_fin">Date de fin </label>
+
+                            <input type="datetime-local" id="date_fin" name="date_fin" class="form-control" placeholder="Date de fin" required value="{{ date_fin }}">
+                        </div>
+                        <div class="col-lg-2 col-md-2 form-group">
+                            <button class="btn btn-main-primary mg-t-10 mg-sm-t-25">Afficher</button>
+                        </div>
+                    </div>
+
+                </form>
+
+                <div class="pl-4 pr-4 pt-4 pb-3">
+                    <div class="">
+                        <div class="row">
+                            {% if is_granted('ROLE_ADMIN') %}
+                                <div class="col-md-6 col-6 text-center">
+                                    <div class="task-box primary mb-0">
+                                        <p class="mb-0 tx-12">Chiffre d'affaire</p>
+                                        <h3 class="mb-0">{{ agent.user.entreprise.stats(agent.user, date_debut, date_fin)["ca"]|number_format(0, ',', '.') }}  FCFA</h3>
+                                    </div>
+                                </div>
+                            {% endif %}
+                            <div class="col-md-6 col-6 text-center">
+                                <div class="task-box danger  mb-0">
+                                    <p class="mb-0 tx-12">Commande{{ agent.user.entreprise.stats(agent.user, date_debut, date_fin)["traite"] > 1 ? "s":"" }} traitée{{ agent.user.entreprise.stats(agent.user, date_debut, date_fin)["traite"] > 1 ? "s":"" }}</p>
+                                    <h3 class="mb-0">{{ agent.user.entreprise.stats(agent.user, date_debut, date_fin)["traite"] }}</h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Agent -->
+                <div class="task-stat pb-0">
+                    <div class="d-flex tasks">
+                        <div class="mb-0">
+                            <div class="h6 fs-15 mb-0">Agent Livreur</div>
+                        </div>
+                    </div>
+                    <div class="d-flex tasks">
+                        <div class="mb-0">
+                            <div class="h6 fs-15 mb-0"><i class="far fa-dot-circle text-success mr-2"></i>Commande{{ agent.user.entreprise.stats(agent.user, date_debut, date_fin)["user_livraison_agent"] > 1 ? "s":"" }} livrée{{ agent.user.entreprise.stats(agent.user, date_debut, date_fin)["user_livraison_agent"] > 1 ? "s":"" }}</div>
+                        </div>
+                        <span class="float-right ml-auto">{{ agent.user.entreprise.stats(agent.user, date_debut, date_fin)["user_livraison_agent"] }}</span>
+                    </div>
+                    <div class="d-flex tasks">
+                        <div class="mb-0">
+                            <div class="h6 fs-15 mb-0"><i class="far fa-dot-circle text-purple mr-2"></i>Commande{{ (agent.user.entreprise.stats(agent.user, date_debut, date_fin)["livreur"] - agent.user.entreprise.stats(agent.user, date_debut, date_fin)["user_livraison_agent"]) > 1 ? "s":"" }} en attente de livraison</div>
+                        </div>
+                        <span class="float-right ml-auto">{{ (agent.user.entreprise.stats(agent.user, date_debut, date_fin)["livreur"] - agent.user.entreprise.stats(agent.user, date_debut, date_fin)["user_livraison_agent"]) }}</span>
+                    </div>
+                    <div class="d-flex tasks">
+                        <div class="mb-0">
+                            <div class="h6 fs-15 mb-0"><i class="far fa-dot-circle text-warning mr-2"></i>Relance{{ agent.user.entreprise.stats(agent.user, date_debut, date_fin)["user_relance"] > 1 ? "s":"" }} signalée{{ agent.user.entreprise.stats(agent.user, date_debut, date_fin)["user_relance"] > 1 ? "s":"" }}</div>
+                        </div>
+                        <span class="float-right ml-auto">{{ agent.user.entreprise.stats(agent.user, date_debut, date_fin)["user_relance"] }}</span>
+                    </div>
+                    <div class="d-flex tasks mb-0 border-bottom-0">
+                        <div class="mb-0">
+                            <div class="h6 fs-15 mb-0"><i class="far fa-dot-circle text-danger mr-2"></i>Annulation{{ agent.user.entreprise.stats(agent.user, date_debut, date_fin)["user_delete"] > 1 ? "s":"" }} signalée{{ agent.user.entreprise.stats(agent.user, date_debut, date_fin)["user_delete"] > 1 ? "s":"" }}</div>
+                        </div>
+                        <span class="float-right ml-auto">{{ agent.user.entreprise.stats(agent.user, date_debut, date_fin)["user_delete"] }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-12 col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="main-content-label mg-b-5">
+                        <h3>Commandes</h3>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-bordered text-md-nowrap" id="example1">
+                            <thead>
+                                <tr>
+                                    <th class="wd-5p border-bottom-0">#</th>
+                                    <th class="wd-10p border-bottom-0">Commande</th>
+                                    <th class="wd-15p border-bottom-0">Type de commande</th>
+                                    <th class="wd-15p border-bottom-0">Nom du client</th>
+                                    <th class="wd-10p border-bottom-0">Contact client</th>
+                                    <th class="wd-15p border-bottom-0">Lieu livraison</th>
+                                    <th class="wd-10p border-bottom-0">Date souhaitée</th>
+                                    <th class="wd-10p border-bottom-0">Etat</th>
+                                        {#  <th class="wd-5p border-bottom-0">Montant_recu</th>
+                                                                              <th>Sku</th>
+                                                                                <th>Date_add</th>
+                                                                                <th>Date_del</th>
+                                                                                <th>Etat_val</th>
+                                                                                <th>Etat_del</th>
+                                                                                <th>Date_livraison</th>
+                                                                                <th>Etat_livraison</th>
+                                                                                <th>Date_retour</th>
+                                                                                <th>Etat_retour</th>#}
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for commande in commandes %}
+                                    <tr>
+                                        <td>{{ loop.index}}</td>
+                                        <td>{{ commande.sku }}</td>
+                                        <td>{{ commande.typeCommande|upper }}</td>
+                                        <td>{{ commande.nomClient }}</td>
+                                        <td>{{ commande.numeroClient }}</td>
+                                        <td>{{ commande.lieuLivraison }}<br/></td>
+                                            {#<td>{{ commande.fraisLivraison }}</td>
+                                            <td>{{ commande.montantRecu }}</td>
+                                            <td>{{ commande.sku }}</td>
+                                            <td>{{ commande.dateAdd ? commande.dateAdd|date('Y-m-d H:i:s') : '' }}</td>
+                                            <td>{{ commande.dateDel ? commande.dateDel|date('Y-m-d H:i:s') : '' }}</td>
+                                            <td>{{ commande.etatVal ? 'Yes' : 'No' }}</td>
+                                            <td>{{ commande.etatDel ? 'Yes' : 'No' }}</td>
+                                            <td>{{ commande.dateLivraison ? commande.dateLivraison|date('Y-m-d H:i:s') : '' }}</td>
+                                            <td>{{ commande.etatLivraison ? 'Yes' : 'No' }}</td>#}
+                                        <td>{{ commande.dateLivraisonSouhaite ? commande.dateLivraisonSouhaite|date('d-m-Y H:i:s') : '' }}</td>
+                                        {#                                        <td>{{ commande.dateAdd ? commande.dateAdd|date('d-m-Y H:i:s') : '' }}</td>#}
+                                        <td><span class="badge badge-{{ commande.etat['etatCouleur'] }}">{{ commande.etat['etatLibelle'] }}</span></td>
+                                    </tr>
+                                {% else %}
+                                    <tr>
+                                        <td colspan="10" align="center">Aucune donnée trouvée</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div> 
+{% endblock %}
+
+
+{% block script %}
+
+    {{ parent() }}
+
+    <!-- Internal Data tables -->
+    <script src="{{ asset('plugins/datatable/js/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ asset('plugins/datatable/js/dataTables.dataTables.min.js') }}"></script>
+    <script src="{{ asset('plugins/datatable/js/dataTables.responsive.min.js') }}"></script>
+    <script src="{{ asset('plugins/datatable/js/responsive.dataTables.min.js') }}"></script>
+    <script src="{{ asset('plugins/datatable/js/jquery.dataTables.js') }}"></script>
+    <script src="{{ asset('plugins/datatable/js/dataTables.bootstrap4.js') }}"></script>
+    <script src="{{ asset('plugins/datatable/js/dataTables.buttons.min.js') }}"></script>
+    <script src="{{ asset('plugins/datatable/js/buttons.bootstrap4.min.js') }}"></script>
+    <script src="{{ asset('plugins/datatable/js/jszip.min.js') }}"></script>
+    <script src="{{ asset('plugins/datatable/js/pdfmake.min.js') }}"></script>
+    <script src="{{ asset('plugins/datatable/js/vfs_fonts.js') }}"></script>
+    <script src="{{ asset('plugins/datatable/js/buttons.html5.min.js') }}"></script>
+    <script src="{{ asset('plugins/datatable/js/buttons.print.min.js') }}"></script>
+    <script src="{{ asset('plugins/datatable/js/buttons.colVis.min.js') }}"></script>
+    <script src="{{ asset('plugins/datatable/js/dataTables.responsive.min.js') }}"></script>
+    <script src="{{ asset('plugins/datatable/js/responsive.bootstrap4.min.js') }}"></script>
+
+    <!-- datatable js -->
+    <script>
+        $(document).ready(function () {
+            $('#example1').DataTable({
+                dom: 'Bfrtip',
+                lengthMenu: [
+                    [10, 25, 50, 100, -1],
+                    ['10 lignes', '25 lignes', '50 lignes', '100 lignes', 'Tout afficher']
+                ],
+                buttons: [
+                    'pageLength', 'colvis', 'excel', 'pdf'
+                ],
+                "language": {
+                    "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/French.json",
+                    buttons: {
+                        pageLength: {
+                            _: "Afficher %d éléments",
+                            '-1': "Tout afficher"
+                        }
+                    }
+                },
+            });
+        });
+    </script>
+
+{% endblock %}

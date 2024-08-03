@@ -1,0 +1,61 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ajouter Entreprise{% endblock %}
+
+{% block body %}
+    <div class="row">
+        <div class="col-lg-12 col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="main-content-label mg-b-5">
+                        <h3>Ajouter une nouvelle entreprise</h3>
+                    </div>
+
+                    {{ include('entreprise/_form.html.twig') }}
+
+                    <a href="{{ path('entreprise_index') }}"><i class="fa fa-arrow-left"></i> Rétourner à la liste</a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block script %} 
+
+    {{ parent() }}
+
+    <script type="text/javascript">
+    $("document").ready(function () {
+
+        $('#entreprise_message_1').keyup(function () { verifCaractere(1) });
+        $('#entreprise_message_2').keyup(function () { verifCaractere(2) });
+        $('#entreprise_message_3').keyup(function () { verifCaractere(3) });
+        $('#entreprise_message_4').keyup(function () { verifCaractere(4) });
+        $('#entreprise_message_5').keyup(function () { verifCaractere(5) });
+
+    });
+
+    function verifCaractere(number) {
+       // alert(number);
+        var nombreCaractere = $("#entreprise_message_" + number).val().length;
+        // On soustrait le nombre limite au nombre de caractère existant
+        var nombreCaractere = 160 - nombreCaractere;
+        var nombreMots = jQuery.trim($("#entreprise_message_" + number).val()).split(' ').length;
+        if ($("#entreprise_message_" + number).val() === '') {
+            nombreMots = 0;
+        }
+
+        var msg = ' ' + nombreMots + ' mot(s) | ' + nombreCaractere + ' Caractere(s) restant';
+        $('#compteur' + number).text(msg);
+        // On écris le nombre de caractère en rouge si celui si est inférieur à 0 
+        // La limite est donc dépasse
+        if (nombreCaractere < 0) {
+            $('#compteur' + number).addClass("mauvais");
+        } else {
+            $('#compteur' + number).removeClass("mauvais");
+        }
+
+    }
+
+</script>
+{% endblock %} 

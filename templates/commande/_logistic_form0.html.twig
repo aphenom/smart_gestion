@@ -1,0 +1,53 @@
+{{ form_start(form, {'attr': {'class': 'form-valide', 'id': 'myForm'}}) }}
+
+<div class="control-group form-group">
+    <a href="#" id="btn-finish-livraison" onclick="submitForm('finish-livraison')" class="btn mb-1 btn-success btn-xs">Valider livraison</a>
+    
+    <a href="#" class="btn mb-1 btn-info btn-xs"id="btn-start-livraison-view" onclick="visibleForm('start-livraison')">Lancer la livraison</a>
+
+    <a href="#" id="btn-stop-livraison" onclick="submitForm('stop-livraison')" class="btn mb-1 btn-dark btn-xs">Annuler la livraison</a>
+
+    <a href="#" class="btn mb-1 btn-danger btn-xs" id="btn-cancel-livraison-view" onclick="visibleForm('cancel-livraison')">Retour de commande</a>
+
+    <a href="{{ path('commande_facture', {'id': commande.id}) }}" target="_blank" class="btn mb-1 btn-primary btn-xs">Imprimer la facture</a>
+</div>
+
+<div class="control-group form-group btn-start-livraison">
+    {# Génération du label. #}
+    {{ form_label(form.agent_livreur, "Livreur * ", {'label_attr': {'class': 'form-label'}})
+    }}
+    {# Affichage des erreurs pour ce champ précis. #}
+    {{ form_errors(form.agent_livreur) }}
+    {# Génération de l'input. #}
+    {{ form_widget(form.agent_livreur, {'attr': {'class': 'form-control', 'placeholder':"", 'required':"required"}})
+    }}
+</div>
+
+<div class="control-group form-group btn-start-livraison">
+    <a class="btn btn-info pd-x-30 mg-r-5 mg-t-5" onclick="submitForm('start-livraison')">{{ button_label|default('Lancer la livraison') }}</a>
+    <input type="reset" class="btn btn-dark pd-x-30 mg-t-5" value="Annuler" onclick="visibleForm('start-livraison-hide')">
+</div>
+
+<div class="control-group form-group btn-cancel-livraison">
+    {# Génération du label. #}
+    {{ form_label(form.objet_retour, "Objet du retour * ", {'label_attr': {'class': 'form-label'}})
+    }}
+    {# Affichage des erreurs pour ce champ précis. #}
+    {{ form_errors(form.objet_retour) }}
+    {# Génération de l'input. #}
+    {{ form_widget(form.objet_retour, {'attr': {'class': 'form-control', 'placeholder':"Objet du retour de la commande"}})
+    }}
+</div>
+
+<div class="control-group form-group btn-cancel-livraison">
+    <a class="btn btn-danger pd-x-30 mg-r-5 mg-t-5" onclick="submitForm('cancel-livraison')">{{ button_label|default('Retour de commande') }}</a>
+    <input type="reset" class="btn btn-dark pd-x-30 mg-t-5" value="Annuler" onclick="visibleForm('cancel-livraison-hide')">
+</div>
+<div class="control-group form-group btn-cancel-livraison btn-start-livraison">
+    <div class="alert alert-secondary">Les champs marqués par (*) doivent être obligatoirement
+        remplis.<br />
+        <!--Pour les champs marqués par (**) ; au minimum l'un d'entre eux doit être rempli.-->
+    </div>
+</div>
+{{ form_widget(form) }}
+{{ form_end(form) }}

@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+
+        <meta charset="UTF-8">
+        <meta name='viewport' content='width=device-width, initial-scale=1.0, user-scalable=0'>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="Description" content="Bootstrap Responsive Admin Web Dashboard HTML5 Template">
+        <meta name="Author" content="Spruko Technologies Private Limited">
+        <meta name="Keywords" content="admin,admin dashboard,admin dashboard template,admin panel template,admin template,admin theme,bootstrap 4 admin template,bootstrap 4 dashboard,bootstrap admin,bootstrap admin dashboard,bootstrap admin panel,bootstrap admin template,bootstrap admin theme,bootstrap dashboard,bootstrap form template,bootstrap panel,bootstrap ui kit,dashboard bootstrap 4,dashboard design,dashboard html,dashboard template,dashboard ui kit,envato templates,flat ui,html,html and css templates,html dashboard template,html5,jquery html,premium,premium quality,sidebar bootstrap 4,template admin bootstrap 4"/>
+
+        <!-- Title -->
+        <title>{% block title %}Connexion{% endblock %}</title>
+
+        <!--- Favicon --->
+        <link rel="icon" href="{{ asset('img/brand/favicon.png') }}" type="image/x-icon"/>
+
+        <!--- Icons css --->
+        <link href="{{ asset('css/icons.css') }}" rel="stylesheet">
+
+        <!--- Right-sidemenu css --->
+        <link href="{{ asset('plugins/sidebar/sidebar.css') }}" rel="stylesheet">
+
+        <!--- Custom Scroll bar --->
+        <link href="{{ asset('plugins/mscrollbar/jquery.mCustomScrollbar.css') }}" rel="stylesheet"/>
+
+        <!--- Style css --->
+        <link href="{{ asset('css/style.css') }}" rel="stylesheet">
+        <link href="{{ asset('css/skin-modes.css') }}" rel="stylesheet">
+
+        <!--- Sidemenu css --->
+        <link href="{{ asset('css/sidemenu.css') }}" rel="stylesheet">
+
+        <!--- Animations css --->
+        <link href="{{ asset('css/animate.css') }}" rel="stylesheet">
+
+    </head>
+    <body class="main-body bg-light">
+
+        <!-- Loader -->
+        <div id="global-loader">
+            <img src="{{ asset('img/loaders/loader-4.svg') }}" class="loader-img" alt="Loader">
+        </div>
+        <!-- /Loader -->
+
+        <!-- main-signin-wrapper -->
+        <div class="my-auto page page-h">
+
+            <div class="main-signin-wrapper">
+
+                <div class="main-card-signin d-md-flex wd-100p">
+                    {% block body %}
+                        <div class="wd-md-50p login d-none d-md-block page-signin-style p-5 text-white" >
+
+                            <div class="my-auto authentication-pages">
+
+
+
+                                <a class="text-center" href="index.html"> <h4>Rosella</h4></a>
+
+                                <form class="mt-5 mb-5 login-input">
+                                    <div class="form-group">
+                                        <input type="email" class="form-control" placeholder="Email">
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="password" class="form-control" placeholder="Password">
+                                    </div>
+                                    <button class="btn login-form__btn submit w-100">Sign In</button>
+                                </form>
+                                <p class="mt-5 login-form__footer">Dont have account? <a href="page-register.html" class="text-primary">Sign Up</a> now</p>
+
+
+
+                            </div>
+
+                        </div>
+                    {% endblock %}
+                </div>
+
+            </div>
+
+        </div>
+
+        {% block javascript %}
+            <!--**********************************
+Scripts
+***********************************-->
+
+            <!--- JQuery min js --->
+            <script src="{{ asset('plugins/jquery/jquery.min.js') }}"></script>
+
+            <!--- Bootstrap Bundle js --->
+            <script src="{{ asset('plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+
+            <!--- Ionicons js --->
+            <script src="{{ asset('plugins/ionicons/ionicons.js') }}"></script>
+
+            <!--- JQuery sparkline js --->
+            <script src="{{ asset('plugins/jquery-sparkline/jquery.sparkline.min.js') }}"></script>
+
+
+            <!--- Moment js --->
+            <script src="{{ asset('plugins/moment/moment.js') }}"></script>
+
+            <!--- Eva-icons js --->
+            <script src="{{ asset('js/eva-icons.min.js') }}"></script>
+
+            <!--- Rating js --->
+            <script src="{{ asset('plugins/rating/jquery.rating-stars.js') }}"></script>
+            <script src="{{ asset('plugins/rating/jquery.barrating.js') }}"></script>
+
+            <!--- Custom js --->
+            <script src="{{ asset('js/custom.js') }}"></script>
+
+        {% endblock %}   
+
+
+    </body>
+</html>
+
+
+
+
+

@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Création Commande{% endblock %}
+
+{% block body %}
+    <div class="row">
+        <div class="col-lg-12 col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="main-content-label mg-b-5">
+                        <h3>Créer une nouvelle commande</h3>
+                    </div>
+
+                    {{ include('commande/_form.html.twig') }}
+
+                    <a href="{{ path('commande_index') }}"><i class="fa fa-arrow-left"></i> Rétourner à la liste</a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

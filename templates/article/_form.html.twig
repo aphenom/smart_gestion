@@ -1,0 +1,69 @@
+{{ form_start(form, {'attr': {'class': 'form-valide'}}) }}
+
+<div class="control-group form-group">
+    {# Génération du label. #}
+    {{ form_label(form.nom, "Nom * ", {'label_attr': {'class': 'form-label'}})
+    }}
+    {# Affichage des erreurs pour ce champ précis. #}
+    {{ form_errors(form.nom) }}
+    {# Génération de l'input. #}
+    {{ form_widget(form.nom, {'attr': {'class': 'form-control', 'placeholder':"Nom de l'article"}})
+    }}
+</div>
+
+<div class="control-group form-group">
+    {# Génération du label. #}
+    {{ form_label(form.pu_achat, "Prix unitaire d'achat (FCFA) * ", {'label_attr': {'class': 'form-label'}})
+    }}
+    {# Affichage des erreurs pour ce champ précis. #}
+    {{ form_errors(form.pu_achat) }}
+    {# Génération de l'input. #}
+    {{ form_widget(form.pu_achat, {'attr': {'class': 'form-control', 'placeholder':"Prix unitaire d'achat de l'article"}})
+    }}
+</div>
+
+<div class="control-group form-group">
+    {# Génération du label. #}
+    {{ form_label(form.pu_vente, "Prix unitaire de vente (FCFA) * ", {'label_attr': {'class': 'form-label'}})
+    }}
+    {# Affichage des erreurs pour ce champ précis. #}
+    {{ form_errors(form.pu_vente) }}
+    {# Génération de l'input. #}
+    {{ form_widget(form.pu_vente, {'attr': {'class': 'form-control', 'placeholder':"Prix unitaire de vente de l'article"}})
+    }}
+</div>
+
+<div class="control-group form-group">
+    {# Génération du label. #}
+    {{ form_label(form.seuil_approvisionnement, "Seuil d'approvisionnement * ", {'label_attr': {'class': 'form-label'}})
+    }}
+    {# Affichage des erreurs pour ce champ précis. #}
+    {{ form_errors(form.seuil_approvisionnement) }}
+    {# Génération de l'input. #}
+    {{ form_widget(form.seuil_approvisionnement, {'attr': {'class': 'form-control', 'placeholder':"Seuil d'approvisionnement de l'article"}})
+    }}
+</div>
+
+<div class="col-lg-3 control-group form-group">
+    {# Génération du label. #}
+    {{ form_label(form.imageFile, "Image * ", {'label_attr': {'class': 'form-label'}})
+    }}
+    {# Affichage des erreurs pour ce champ précis. #}
+    {{ form_errors(form.imageFile) }}
+    {# Génération de l'input. #}
+    {{ form_widget(form.imageFile, {'attr': {'class': 'form-control', 'placeholder':"Image de l'article"}})
+    }}
+</div>
+
+<div class="control-group form-group">
+    <button class="btn btn-main-primary pd-x-30 mg-r-5 mg-t-5">{{ button_label|default('Enregistrer') }}</button>
+    <input type="reset" class="btn btn-dark pd-x-30 mg-t-5" value="Annuler">
+</div>
+<div class="control-group form-group">
+    <div class="alert alert-secondary">Les champs marqués par (*) doivent être obligatoirement
+        remplis.<br />
+        <!--Pour les champs marqués par (**) ; au minimum l'un d'entre eux doit être rempli.-->
+    </div>
+</div>
+{{ form_widget(form) }}
+{{ form_end(form) }}

@@ -1,0 +1,62 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier Livreur{% endblock %}
+
+{% block body %}
+    <div class="row">
+        <div class="col-lg-12 col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="main-content-label mg-b-5">
+                        <h3>Modifier Livreur</h3>
+                    </div>
+
+                    {{ include('agent/_form.html.twig', {'button_label': 'Modifier'}) }}
+
+                    <div class="row m-b-30">
+                        <div class="col-auto"><a class="btn mb-1 btn-outline-primary" href="{{ path('agent_index') }}"><i class="fa fa-arrow-left"></i> Rétourner à la liste</a></div>
+                        <div class="col-auto">{{ include('agent/_delete_form.html.twig') }}</div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>       
+{% endblock %}
+
+{% block script %} 
+
+    {{ parent() }}
+
+    <script type="text/javascript">
+        $("document").ready(function () {
+            //$('#div-societe').fadeOut("slow");
+            modifPass('hide');
+            /*$('#input_np_evalp').fadeOut("slow");
+             $('#label_autreprecision').fadeOut("slow");
+             $('#input_autreprecision').fadeOut("slow");*/
+            $('#agent_user_username').attr('readonly', true);
+
+
+        });
+
+        function modifPass(type) {
+            //alert(object.value);
+            val = type;
+            if (val == "hide") {
+                $('#btn_password').fadeIn("slow");
+                $('#btn_password_reset').fadeOut("slow");
+                $('#agent_user_password').fadeOut("slow");
+                $('#agent_user_password').val($('#agent_user_text_password').val());
+            } else {
+                $('#btn_password').fadeOut("slow");
+                $('#btn_password_reset').fadeIn("slow");
+                $('#agent_user_password').fadeIn("slow");
+                $('#agent_user_password').val("");
+            }
+
+        }
+
+    </script>
+
+{% endblock %} 

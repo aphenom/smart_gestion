@@ -1,0 +1,316 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Composition Commande{% endblock %}
+
+{% block css %}
+    <!-- Internal Data table css -->
+    <link href="{{ asset('plugins/datatable/css/dataTables.bootstrap4.min.css') }}" rel="stylesheet" />
+    <link href="{{ asset('plugins/datatable/css/buttons.bootstrap4.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('plugins/datatable/css/responsive.bootstrap4.min.css') }}" rel="stylesheet" />
+    <link href="{{ asset('plugins/datatable/css/jquery.dataTables.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('plugins/datatable/css/responsive.dataTables.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('plugins/select2/css/select2.min.css') }}" rel="stylesheet">
+
+    {{ parent() }}
+
+{% endblock %}
+
+{% block body %}
+    <div class="row">
+        <div class="col-md-12 col-lg-6">
+            <div class="card">
+                <div class="card-header pb-0">
+                    <div class="row"><div class="col-lg-8 col-md-8 main-content-label"><h3>Commande</h3></div>
+                        {% if(commandeArticle.commande.etatLivraison == false) %}
+                            <div class="col-lg-4 col-md-4"><a href="{{ path('commande_edit', {'id': commandeArticle.commande.id}) }}" class="btn mb-1 btn-success btn-xs">Modifier</a></div>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="card-body">
+                    <table class="table">
+                        <tbody>
+                            <tr>
+                                <th>#</th>
+                                <td>{{ commandeArticle.commande.sku }} <span class="badge badge-{{ commandeArticle.commande.etat['etatCouleur'] }}">{{ commandeArticle.commande.etat['etatLibelle'] }}</span></td>
+                            </tr>
+                            <tr>
+                                <th>Type de commande</th>
+                                <td>{{ commandeArticle.commande.typeCommande|upper }}</td>
+                            </tr>
+                            <tr>
+                                <th>Nom du client</th>
+                                <td>{{ commandeArticle.commande.nomClient }}</td>
+                            </tr>
+                            <tr>
+                                <th>Contact du client</th>
+                                <td>{{ commandeArticle.commande.numeroClient }}</td>
+                            </tr>
+                            {% if commandeArticle.commande.typeCommande != 'locale' %}                               
+                                <tr>
+                                    <th>Lieu de livraison</th>
+                                    <td>{{ commandeArticle.commande.lieuLivraison }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Date de livraison souhaitée</th>
+                                    <td>{{ commandeArticle.commande.dateLivraisonSouhaite ? commandeArticle.commande.dateLivraisonSouhaite|date('d-m-Y H:i:s') : '' }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Frais de livraison</th>
+                                    <td>{{ commandeArticle.commande.fraisLivraison|number_format(0, ',', '.') }} FCFA</td>
+                                </tr>
+                            {% endif %}
+
+                            {% if commandeArticle.commande.etatLivraison == true %}
+                                <tr>
+                                    <th>Livreur </th>
+                                    <td>{{ commandeArticle.commande.agentLivreur.user.displayName }}</td>
+                                </tr>
+                            {% endif %}
+
+                            {#            <tr>
+                                            <th>Montant_recu</th>
+                                            <td>{{ commande.montantRecu }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Sku</th>
+                                            <td>{{ commande.sku }}</td>
+                                        </tr>#}
+                            <tr>
+                                <th>Ajoutée le</th>
+                                <td>{{ commandeArticle.commande.dateAdd ? commandeArticle.commande.dateAdd|date('d-m-Y H:i:s') : '' }}</td>
+                            </tr>
+                            <tr>
+                                <th>Ajouté par </th>
+                                <td>{{ commandeArticle.commande.userAdd.displayName }}</td>
+                            </tr>
+                            {#<tr>
+                                <th>Commentaire </th>
+                                <td>{{ commandeArticle.commande.commentaire }}</td>
+                            </tr>#}
+                            <tr>
+                                <td colspan="2"> 
+                                    <div class="card-header" id="heading1" role="tab">
+                                        <a aria-controls="collapse1" aria-expanded="false" class="collapsed" data-toggle="collapse" href="#collapse1"><b>Voir l'historique</b></a>
+                                    </div>
+                                    <div aria-labelledby="heading1" class="collapse" data-parent="#heading1" id="collapse1" role="tabpanel">
+                                        <div class="card-body">
+                                            <table class="table text-md-nowrap">
+                                                <thead>
+                                                    <tr>
+                                                        <th class="wd-15p border-bottom-0">Date</th>
+                                                        <th class="wd-15p border-bottom-0">Etat</th>
+                                                        <th class="wd-50p border-bottom-0">Commentaire</th>
+                                                        <th class="wd-20p border-bottom-0">utilisateur</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {% for historique in commandeArticle.commande.historiques|reverse %}
+                                                        <tr>
+                                                            <td>{{ historique.date ? historique.date|date('d-m-Y H:i:s') : '' }}</td>
+                                                            <td>{{ historique.step['etatLibelle'] }}</td>
+                                                            <td><i>{{ historique.commentaire }}</i></td>
+                                                            <td><i>{{ historique.user.displayName  }}</i></td>
+                                                        </tr>
+                                                    {% else %}
+                                                        Aucune information disponible.
+                                                    {% endfor %}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </td>
+                                {#                                <td>{{ commande.commentaire }}</td>#}
+                            </tr>
+                            {#                            <tr>
+                                                            <th>Date_del</th>
+                                                            <td>{{ commande.dateDel ? commande.dateDel|date('Y-m-d H:i:s') : '' }}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th>Etat_val</th>
+                                                            <td>{{ commande.etatVal ? 'Yes' : 'No' }}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th>Etat_del</th>
+                                                            <td>{{ commande.etatDel ? 'Yes' : 'No' }}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th>Date_livraison</th>
+                                                            <td>{{ commande.dateLivraison ? commande.dateLivraison|date('Y-m-d H:i:s') : '' }}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th>Etat_livraison</th>
+                                                            <td>{{ commande.etatLivraison ? 'Yes' : 'No' }}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th>Date_retour</th>
+                                                            <td>{{ commande.dateRetour ? commande.dateRetour|date('Y-m-d H:i:s') : '' }}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th>Etat_retour</th>
+                                                            <td>{{ commande.etatRetour ? 'Yes' : 'No' }}</td>
+                                                        </tr>
+                                                        #}
+                        </tbody>
+                    </table>
+                    <a href="{{ path('commande_global_index', {'role': "commercial", 'etat': "all"}) }}"><i class="fa fa-arrow-left"></i> Rétourner à la liste</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="card">
+                {% if(commandeArticle.commande.etatLancement == false) %}
+                    <div class="card-header pb-0">
+                        <div class="row"><div class="col-lg-8 col-md-8 main-content-label"><h3>Ajouter un article</h3></div><div class="col-lg-4 col-md-4"><a href="{{ path('commande_article_new', {'id': commandeArticle.commande.id}) }}" class="">Ajouter article interne</a></div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+
+                        {{ include('commande/_article_externe_form.html.twig') }}
+
+                    </div>
+                {% else %}
+                    <div class="card-header pb-0"><h3>Statut</h3></div>
+                    <div class="card-body">
+                        <div class="alert alert-{{ commandeArticle.commande.etat['etatCouleur'] }}" role="alert" id='message-info'>
+                            <a href="#" class="alert-link">{{ commandeArticle.commande.etat['etatLibelle'] }}</a> - <i>Depuis le {{ commandeArticle.commande.etat['etatDate']  ? commandeArticle.commande.etat['etatDate']|date('d-m-Y H:i:s') : '' }}</i> 
+                            {% if(commandeArticle.commande.etatRelance == true) %}<span class='badge badge-warning'>"A relancer" Signalé</span> {% endif %}
+                            {% if(commandeArticle.commande.etatDel == true) %}<span class='badge badge-danger'>"Annulation" Signalée</span> {% endif %}
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered text-md-nowrap" id="example1">
+                            <thead>
+                                <tr>
+                                    <th class="wd-5p border-bottom-0">#</th>
+                                    <th class="wd-10p border-bottom-0">Code</th>                
+                                    <th class="wd-20p border-bottom-0">Nom</th>
+                                    <th class="wd-15p border-bottom-0">Image</th>
+                                    <th class="wd-15p border-bottom-0">Prix Unitaire Vente (FCFA)</th>
+                                        {% if(is_granted('ROLE_ADMIN')) %}
+                                        <th class="wd-10p border-bottom-0">Prix Unitaire Achat (FCFA)</th>
+                                        {% endif %}
+                                    <th class="wd-10p border-bottom-0">Quantité</th>
+                                    <th class="wd-15p border-bottom-0">Prix total (FCFA)</th>
+                                    <th class="wd-10p border-bottom-0">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for ca in commandeArticles|reverse %}
+                                    <tr>
+                                        <td>{{ loop.index}}</td>
+                                        <td>{{ ca.article.sku }}</td>
+                                        <td>{{ ca.article.nom }}</td>
+                                        <td>
+                                            {% if ca.article.etatProprio %}
+                                                <img alt="Responsive image" class="img-thumbnail wd-100p wd-sm-200" src="{{ vich_uploader_asset(ca.article, 'imageFile') }}">
+                                            {% else %}
+                                                Titulaire : {{ ca.article.nomProprio }}                                    
+                                            {% endif %}
+                                        </td>
+                                        <td>{{ ca.puVenteFinal|number_format(0, ',', '.') }}</td>
+                                        {% if(is_granted('ROLE_ADMIN')) %}
+                                            <td>{{ ca.puAchat|number_format(0, ',', '.') }}</td>
+                                        {% endif %}
+                                        <td>{{ ca.quantite }}</td>
+                                        <td>{{ ca.total|number_format(0, ',', '.') }}</td>
+                                        {#<td><span class="badge {{ ca.article.etatVal ? 'badge-success' : 'badge-danger' }}">{{ ca.article.etatVal ? 'Actif' : 'Inactif' }}</span></td>#}
+                                        <td>
+                                            <div class="col-auto">{{ include('commande/_delete_article_form.html.twig') }}</div>
+                                            {#<a href="{{ path('article_edit', {'id': ca.article.id}) }}"
+                                               class="btn mb-1 btn-success btn-xs">Modifier</a>#}
+                                        </td>
+                                    </tr>
+                                {% else %}
+                                    <tr>
+                                        <td colspan="10" align="center">Aucune donnée trouvée</td>
+                                    </tr>
+                                {% endfor %}
+                                <tr>
+                                    <td colspan="{{ is_granted('ROLE_ADMIN') == true ? 7:6 }}" align="right">Total</td>
+                                    <td align="right">{{ commandeArticle.commande.totalCommandeArticle|number_format(0, ',', '.') }} FCFA</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="{{ is_granted('ROLE_ADMIN') == true ? 7:6 }}" align="right">Frais de livraison</td>
+                                    <td align="right">{{ commandeArticle.commande.fraisLivraison|number_format(0, ',', '.') }} FCFA</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="{{ is_granted('ROLE_ADMIN') == true ? 7:6 }}" align="right">Total Net à payer</td>
+                                    <td align="right">{{ commandeArticle.commande.total|number_format(0, ',', '.') }} FCFA</td>
+                                </tr>
+                            </tbody>
+                        </table>                    </div>
+                        {% if commandeArticles|length > 0 %}
+                            {% set commande = commandeArticle.commande %}
+                        <div style='float:right'>
+                            {{ include('commande/_delete_form.html.twig') }}
+                        </div>
+                    {% endif %}
+
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block script %} 
+
+    {{ parent() }}
+    <!--- Select2 js --->
+    <script src="{{ asset('plugins/select2/js/select2.min.js') }}"></script>
+    <script type="text/javascript">
+        $("document").ready(function () {
+
+            $('select[data-select="true"').select2();
+
+        });
+
+        function submitEtat(type) {
+            //alert(object.value);
+            //objet.submit(false);
+            val = type;
+            text = "";
+            if (val == "relance") {
+                text = "Êtes-vous sûre de vouloir effectuer cette action ?";
+            } else if (val == "annule") {
+                text = "Êtes-vous sûre de vouloir annuler cette commande ?";
+            } else if (val == "valide") {
+                text = "Êtes-vous sûre de vouloir valider cette commande ?";
+            }
+            /*var reponse = confirm(text);
+             if (reponse == true)
+             {
+             var commentaire = prompt(text+" Vous pouvez ajouter un commentaire à cette action !");
+             if (commentaire == null) {
+             return false;
+             } else {
+             $('#history_comment').val(commentaire);
+             return true;
+             }
+             } else {
+             return false;
+             }
+             */
+            var commentaire = prompt(text + " Vous pouvez ajouter un commentaire à cette action !");
+            if (commentaire == null) {
+                //document.getElementById(val + "_form").submit(false);
+                return false;
+            } else {
+                document.getElementById(val + "_comment").value = commentaire;
+                //$('#'+val+'_comment').val(commentaire);
+                //document.getElementById(val + "_form").submit();
+                return true;
+            }
+
+        }
+
+
+    </script>
+
+{% endblock %} 

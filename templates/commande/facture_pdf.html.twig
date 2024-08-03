@@ -1,0 +1,89 @@
+<html>
+    <head><title>Facture - {{commande.sku}}</title>
+    </head>
+    <body>
+        <table border="1px solid" style="text-align: center; padding: 0px;" width="100%">
+            <tbody><tr>
+                    <td colspan="6"><img src="{{ (commande.entreprise and vich_uploader_asset(commande.entreprise, 'imageFile')) ? app.request.getSchemeAndHttpHost() ~ vich_uploader_asset(commande.entreprise, 'imageFile'):app.request.getSchemeAndHttpHost() ~ asset('/img/logo.png') }}" width="208px"></td>
+                </tr>
+                <tr>
+
+                    <th colspan="3" style="text-align: left;">Nom &amp; Prénom(s): <b>{{ commande.nomClient }} </b><br><br>
+                        Tel: <b>{{ commande.numeroClient }}</b><br><br>
+                        Lieu de livraison: <b>{{ commande.lieuLivraison }}</b><br>
+                    </th>
+                    <th colspan="3" style="text-align: center;"><br>Date &amp; heure: {{ commande.dateLancement ? commande.dateLancement|date('d-m-Y H:i:s') : commande.dateVal|date('d-m-Y H:i:s') }}<br><br>
+                        <div>
+                            <!-- insert your custom barcode setting your data in the GET parameter "data" -->
+                            <img alt="Code barre article" src="https://barcode.tec-it.com/barcode.ashx?data={{commande.sku}}&amp;code=Code128&amp;dpi=96&amp;dataseparator=" width="108px">
+                        </div><br/>
+                    </th>
+                </tr>
+
+                {% if commande.etatProprio == true %}
+                    <tr>
+                        <td width="20%">Code Barre</td>
+                        <td width="15%">Image</td>
+                        <td width="17%">Nom article</td>
+                        <td width="8%">Qte</td>
+                        <td width="17%">Prix unitaire</td>
+                        <td width="23%">Prix total</td>
+                    </tr>
+                    {% for ca in commandeArticles|reverse %}
+                        <tr>
+
+
+                            <td>
+                                <div>
+                                    <!-- insert your custom barcode setting your data in the GET parameter "data" -->
+                                    <img alt="Code barre article" src="https://barcode.tec-it.com/barcode.ashx?data={{ca.article.sku}}&amp;code=Code128&amp;dpi=96&amp;dataseparator=" width="108px">
+                                </div>
+                            </td>
+                            <td>
+                                {% if commande.typeCommande != 'locale' %}
+                                    <img src="{{ app.request.getSchemeAndHttpHost() ~ vich_uploader_asset(ca.article, 'imageFile') }}" width="78px"> {% endif %}</td>
+                                <td>{{ ca.article.nom }}</td>
+                                <td>{{ ca.quantite }}</td>
+                                <td>{{ ca.puVenteFinal|number_format(0, ',', '.') }}</td>
+                                <td id="total1">{{ ca.total|number_format(0, ',', '.') }}</td>
+
+                            </tr>
+                            {% endfor %}
+                                <tr>
+                                    <td colspan="3" rowspan="3" style="text-align: right;"> </td>
+                                    <td colspan="2" style="text-align: left;">Total</td>
+                                    <td id="total2" style="text-align: right;">{{ commande.totalCommandeArticle|number_format(0, ',', '.') }} FCFA</td>
+                                </tr>
+                                {% endif %}
+
+                                    <tr>
+                                        <td colspan="2" style="text-align: left;">Frais de livraison</td>
+
+                                        <td id="livr" style="text-align: right;">{{ commande.fraisLivraison|number_format(0, ',', '.') }} FCFA</td>
+
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2" style="text-align: left;">Total Net à payer</td>
+                                        <td id="net" style="text-align: right;">{{ commande.total|number_format(0, ',', '.') }} FCFA</td>
+
+
+                                    </tr>
+
+                                    <tr>
+                                        <td colspan="6" style="text-align: right;">Cachet &amp; Signature<br/><br/><br/></td>
+                                    </tr>
+
+                                    <tr>
+                                        <td colspan="6" style="text-align: left;">
+                                            <b>
+                                                *<u>CONDITIONS DE RETOUR</u><br/>Le retour pour être accepté doit être éligible. L’éligibilité s’apprécie à 02 niveaux :<br/>
+                                                -    Le respect du délai de retour <br/>
+                                                -    Le respect des conditions de retour (FACTURE ET EMBALLAGE DU COLIS BIEN PRESENTE)<br/><br/>
+                                                Le délai de retour : Il est de 3 jours à compter de la livraison ou la réception du colis sauf pour les retours initiés pour article non conforme où le délai de retour passe à 24 Heures. </b><br/><br/>
+                                                Contact : {{ commande.entreprise.contact }}
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </body>
+                    </html>
